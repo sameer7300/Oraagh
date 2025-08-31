@@ -1,0 +1,111 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block page_title %}Media Library{% endblock %}
+{% block page_description %}Manage all your uploaded images and media files{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+    <div class="mb-4 md:mb-0">
+        <h3 class="text-xl font-bold text-gray-800">Media Library</h3>
+        <p class="text-gray-600">{{ page_obj.paginator.count }} total files</p>
+    </div>
+    
+    <a href="/admin/portfolio/leasemedia/add/" class="btn-primary text-white px-6 py-2 rounded-lg flex items-center">
+        <i class="fas fa-upload mr-2"></i>
+        Upload New Media
+    </a>
+</div>
+
+<!-- Media Grid -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+    {% for media in page_obj %}
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+        <div class="relative">
+            <a href="{{ media.file.url }}" target="_blank" class="block h-48">
+                {% if 'image' in media.file_type %}
+                    <img src="{{ media.file.url }}" alt="{{ media.alt_text|default:'Media file' }}" 
+                         class="w-full h-full object-cover">
+                {% else %}
+                    <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                        <i class="fas fa-file-alt text-gray-400 text-4xl"></i>
+                    </div>
+                {% endif %}
+            </a>
+            <div class="absolute top-2 right-2">
+                <span class="px-2 py-1 bg-black bg-opacity-50 text-white text-xs rounded-full font-medium">
+                    {{ media.file_type|upper }}
+                </span>
+            </div>
+        </div>
+        
+        <div class="p-4">
+            <p class="text-sm text-gray-800 font-medium truncate" title="{{ media.file.name|cut:'lease_media/' }}">
+                {{ media.file.name|cut:'lease_media/' }}
+            </p>
+            <p class="text-xs text-gray-500">Uploaded: {{ media.uploaded_at|date:"M d, Y" }}</p>
+            <p class="text-xs text-gray-500">Size: {{ media.file.size|filesizeformat }}</p>
+        </div>
+        
+        <div class="px-4 py-3 bg-gray-50 border-t border-gray-200">
+            <div class="flex justify-end">
+                <a href="/admin/portfolio/leasemedia/{{ media.id }}/change/" 
+                   class="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center mr-4">
+                    <i class="fas fa-edit mr-1"></i>
+                    Edit
+                </a>
+                <a href="/admin/portfolio/leasemedia/{{ media.id }}/delete/" 
+                   class="text-red-600 hover:text-red-700 text-sm font-medium flex items-center">
+                    <i class="fas fa-trash mr-1"></i>
+                    Delete
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <!-- Empty State -->
+    <div class="col-span-full">
+        <div class="text-center py-12">
+            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-images text-gray-400 text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-medium text-gray-800 mb-2">No Media Files Found</h3>
+            <p class="text-gray-600 mb-6">Start by uploading your first media file.</p>
+            <a href="/admin/portfolio/leasemedia/add/" class="btn-primary text-white px-6 py-3 rounded-lg inline-flex items-center">
+                <i class="fas fa-upload mr-2"></i>
+                Upload Your First File
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<div class="mt-8 flex justify-center">
+    <nav class="flex items-center space-x-2">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg">
+                <i class="fas fa-angle-double-left"></i>
+            </a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg">
+                <i class="fas fa-angle-left"></i>
+            </a>
+        {% endif %}
+        
+        <span class="px-4 py-2 bg-red-500 text-white rounded-lg">
+            {{ page_obj.number }}
+        </span>
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg">
+                <i class="fas fa-angle-right"></i>
+            </a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg">
+                <i class="fas fa-angle-double-right"></i>
+            </a>
+        {% endif %}
+    </nav>
+</div>
+{% endif %}
+{% endblock %}

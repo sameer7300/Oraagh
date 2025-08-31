@@ -1,0 +1,114 @@
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Left Column -->
+    <div class="space-y-6">
+        <!-- Project Name -->
+        <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                <i class="fas fa-tag text-red-500 mr-1"></i>
+                Project Name *
+            </label>
+            <input type="text" id="name" name="name" required
+                   value="{% if is_edit %}{{ lease.name }}{% endif %}"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                   placeholder="Enter project name">
+        </div>
+        
+        <!-- Location -->
+        <div>
+            <label for="location" class="block text-sm font-medium text-gray-700 mb-2">
+                <i class="fas fa-map-marker-alt text-red-500 mr-1"></i>
+                Location *
+            </label>
+            <input type="text" id="location" name="location" required
+                   value="{% if is_edit %}{{ lease.location }}{% endif %}"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                   placeholder="Enter location">
+        </div>
+        
+        <!-- Project Size -->
+        <div>
+            <label for="size" class="block text-sm font-medium text-gray-700 mb-2">
+                <i class="fas fa-ruler text-red-500 mr-1"></i>
+                Project Size
+            </label>
+            <select id="size" name="size"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                <option value="">Select project size</option>
+                {% for size_value, size_label in size_choices %}
+                    <option value="{{ size_value }}" {% if is_edit and lease.size == size_value %}selected{% endif %}>
+                        {{ size_label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- Mineral Type -->
+        <div>
+            <label for="mineral_type" class="block text-sm font-medium text-gray-700 mb-2">
+                <i class="fas fa-gem text-red-500 mr-1"></i>
+                Mineral Type
+            </label>
+            <select id="mineral_type" name="mineral_type"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                <option value="">Select mineral type</option>
+                {% for mineral_value, mineral_label in mineral_choices %}
+                    <option value="{{ mineral_value }}" {% if is_edit and lease.mineral_type == mineral_value %}selected{% endif %}>
+                        {{ mineral_label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    
+    <!-- Right Column -->
+    <div class="space-y-6">
+        <!-- Operational Status -->
+        <div>
+            <label for="operational_status" class="block text-sm font-medium text-gray-700 mb-2">
+                <i class="fas fa-power-off text-red-500 mr-1"></i>
+                Operational Status *
+            </label>
+            <select id="operational_status" name="operational_status" required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                {% for status_value, status_label in status_choices %}
+                    <option value="{{ status_value }}" {% if is_edit and lease.operational_status == status_value %}selected{% endif %}>
+                        {{ status_label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- Start Date -->
+        <div>
+            <label for="start_date" class="block text-sm font-medium text-gray-700 mb-2">
+                <i class="fas fa-calendar-plus text-red-500 mr-1"></i>
+                Start Date
+            </label>
+            <input type="date" id="start_date" name="start_date"
+                   value="{% if is_edit and lease.start_date %}{{ lease.start_date|date:'Y-m-d' }}{% endif %}"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
+        </div>
+        
+        <!-- End Date -->
+        <div>
+            <label for="end_date" class="block text-sm font-medium text-gray-700 mb-2">
+                <i class="fas fa-calendar-minus text-red-500 mr-1"></i>
+                End Date
+            </label>
+            <input type="date" id="end_date" name="end_date"
+                   value="{% if is_edit and lease.end_date %}{{ lease.end_date|date:'Y-m-d' }}{% endif %}"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
+        </div>
+    </div>
+</div>
+
+<!-- Description -->
+<div>
+    <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+        <i class="fas fa-file-alt text-red-500 mr-1"></i>
+        Project Description
+    </label>
+    <textarea id="description" name="description" rows="4"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              placeholder="Provide a detailed description of the project...">{% if is_edit %}{{ lease.description }}{% endif %}</textarea>
+</div>

@@ -1,0 +1,283 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Login - Oraagh{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Oraagh Brand Color Palette */
+    :root {
+        --primary-brown: #8B4513;
+        --primary-brown-dark: #654321;
+        --neutral-brown-light: #A0522D;
+        --accent-cream: #F5F5DC;
+        --cream-100: #FEFEFE;
+        --warm-beige: #F4E4BC;
+    }
+    
+    /* Oraagh Typography */
+    .oraagh-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: var(--primary-brown-dark);
+        text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.1);
+    }
+    
+    .oraagh-text {
+        font-family: 'Inter', sans-serif;
+        color: var(--neutral-brown-light);
+    }
+    
+    /* Glassmorphism Effects */
+    .card-glass {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(139, 69, 19, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    /* Input Fields */
+    .input-field {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(5px);
+        border: 2px solid rgba(139, 69, 19, 0.1);
+        border-radius: 12px;
+        padding: 1rem 1rem 1rem 3rem;
+        width: 100%;
+        transition: all 0.3s ease;
+        font-family: 'Inter', sans-serif;
+        color: var(--primary-brown-dark);
+    }
+    
+    .input-field:focus {
+        outline: none;
+        border-color: var(--primary-brown);
+        box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+        background: rgba(255, 255, 255, 0.95);
+    }
+    
+    /* Button Styling */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, var(--primary-brown-dark) 100%);
+        color: white;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 2rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+    
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s;
+    }
+    
+    .btn-primary:hover::before {
+        left: 100%;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
+    }
+    
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(139, 69, 19, 0.2);
+        color: var(--primary-brown-dark);
+        font-weight: 600;
+        border-radius: 12px;
+        padding: 1rem 2rem;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+    
+    .btn-secondary:hover {
+        background: rgba(139, 69, 19, 0.1);
+        border-color: var(--primary-brown);
+        transform: translateY(-2px);
+    }
+    
+    /* Animations */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    
+    .fade-in.animate {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style="background: linear-gradient(135deg, #FEFEFE 0%, #F5F5DC 50%, #F4E4BC 100%);">
+    <div class="max-w-md w-full">
+        <!-- Logo Section -->
+        <div class="text-center mb-8 fade-in" data-animate>
+            <div class="mx-auto w-20 h-20 bg-gradient-to-br from-primary-brown to-primary-brown-dark rounded-full flex items-center justify-center shadow-lg mb-4">
+                <i class="fas fa-mountain text-white text-2xl"></i>
+            </div>
+            <h1 class="oraagh-title text-3xl mb-2">
+                Welcome Back
+            </h1>
+            <p class="oraagh-text">
+                Sign in to your Red Sun Mining account
+            </p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="card-glass p-8 fade-in" data-animate data-delay="200">
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                <!-- Username Field -->
+                <div class="space-y-2 fade-in" data-animate data-delay="400">
+                    <label for="id_username" class="block text-sm font-semibold oraagh-text">
+                        <i class="fas fa-user mr-2" style="color: var(--primary-brown);"></i>Username or Email
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-user" style="color: var(--primary-brown);"></i>
+                        </div>
+                        <input id="id_username" name="username" type="text" required 
+                               class="input-field" 
+                               placeholder="Enter your username or email">
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="space-y-2 fade-in" data-animate data-delay="600">
+                    <label for="id_password" class="block text-sm font-semibold oraagh-text">
+                        <i class="fas fa-lock mr-2" style="color: var(--primary-brown);"></i>Password
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-lock" style="color: var(--primary-brown);"></i>
+                        </div>
+                        <input id="id_password" name="password" type="password" required 
+                               class="input-field" 
+                               placeholder="Enter your password">
+                        <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" onclick="togglePassword('id_password')">
+                            <i id="password-toggle-icon" class="fas fa-eye-slash hover:text-primary-brown cursor-pointer transition-colors" style="color: var(--neutral-brown-light);"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="flex items-center justify-between fade-in" data-animate data-delay="800">
+                    <div class="flex items-center">
+                        <input id="remember-me" name="remember-me" type="checkbox" 
+                               class="h-4 w-4 border-2 rounded transition-colors"
+                               style="accent-color: var(--primary-brown);">
+                        <label for="remember-me" class="ml-2 block text-sm oraagh-text select-none cursor-pointer">
+                            Remember me
+                        </label>
+                    </div>
+                    <div class="text-sm">
+                        <a href="{% url 'accounts:forgot_password' %}" class="font-medium hover:underline transition-colors" style="color: var(--primary-brown);">
+                            Forgot password?
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="fade-in" data-animate data-delay="1000">
+                    <button type="submit" class="btn-primary flex justify-center items-center">
+                        <span class="relative z-10 flex items-center">
+                            <i class="fas fa-sign-in-alt mr-3"></i>
+                            Sign In
+                        </span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Divider -->
+            <div class="mt-8 fade-in" data-animate data-delay="1200">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t" style="border-color: rgba(139, 69, 19, 0.2);"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-4 bg-white oraagh-text opacity-70">Don't have an account?</span>
+                    </div>
+                </div>
+                
+                <!-- Sign Up Link -->
+                <div class="mt-6">
+                    <a href="{% url 'accounts:signup' %}" class="btn-secondary flex justify-center items-center text-decoration-none">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        Create New Account
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-8 text-center fade-in" data-animate data-delay="1400">
+            <p class="text-xs oraagh-text opacity-70">
+                By signing in, you agree to our 
+                <a href="#" class="hover:underline" style="color: var(--primary-brown);">Terms of Service</a> 
+                and 
+                <a href="#" class="hover:underline" style="color: var(--primary-brown);">Privacy Policy</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    const icon = document.getElementById('password-toggle-icon');
+    
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    } else {
+        field.type = 'password';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    }
+}
+
+// Scroll-triggered animations
+document.addEventListener('DOMContentLoaded', function() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const delay = entry.target.dataset.delay || 0;
+                setTimeout(() => {
+                    entry.target.classList.add('animate');
+                }, delay);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe all elements with fade-in animation
+    document.querySelectorAll('.fade-in[data-animate]').forEach(el => {
+        observer.observe(el);
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - {{ order.order_number }}</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #8B4513, #654321);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .header .order-number {
+            font-size: 18px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        /* Content sections */
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            border-left: 4px solid #D4AF37;
+            padding-left: 20px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #D4AF37;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .info-grid {
+            background-color: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        .info-value {
+            color: #2d3748;
+        }
+        
+        /* Order items */
+        .order-item {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .item-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        
+        .item-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .item-info {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .item-price {
+            font-weight: bold;
+            color: #D4AF37;
+            font-size: 16px;
+        }
+        
+        /* Order summary */
+        .order-summary {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+        
+        .summary-total {
+            border-top: 2px solid #D4AF37;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #D4AF37;
+        }
+        
+        /* Next steps */
+        .next-steps {
+            background-color: #f0fff4;
+            border: 1px solid #9ae6b4;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .next-steps h3 {
+            color: #22543d;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .next-steps ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .next-steps li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            color: #2f855a;
+        }
+        
+        .next-steps li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #38a169;
+            font-weight: bold;
+        }
+        
+        /* Contact info */
+        .contact-info {
+            background-color: #fffaf0;
+            border: 1px solid #fbd38d;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .contact-info h3 {
+            color: #c05621;
+            margin-bottom: 15px;
+        }
+        
+        .contact-details {
+            color: #744210;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #2d3748;
+            color: #a0aec0;
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 14px;
+        }
+        
+        .footer .brand {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                box-shadow: none;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .item-details {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .item-price {
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎉 Order Confirmed!</h1>
+            <p>Thank you for your purchase</p>
+            <div class="order-number">{{ order.order_number }}</div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <div class="greeting">
+                Dear {{ user.get_full_name|default:order.billing_name }},
+            </div>
+            
+            <p style="margin-bottom: 25px; color: #4a5568; font-size: 16px;">
+                Thank you for your order with <strong>Oraagh</strong>! We're excited to help you add these premium shawls and elegant fashion pieces to your collection.
+            </p>
+            
+            <!-- Order Details -->
+            <div class="section">
+                <div class="section-title">Order Details</div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <span class="info-label">Order Date:</span>
+                        <span class="info-value">{{ order.created_at|date:"F d, Y at g:i A" }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value">{{ order.get_status_display }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Payment Method:</span>
+                        <span class="info-value">{{ order.payment_method }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Billing Information -->
+            <div class="section">
+                <div class="section-title">Billing Information</div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <span class="info-label">Name:</span>
+                        <span class="info-value">{{ order.billing_name }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value">{{ order.billing_email }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Phone:</span>
+                        <span class="info-value">{{ order.billing_phone }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Address:</span>
+                        <span class="info-value">
+                            {{ order.billing_address }}<br>
+                            {{ order.billing_city }}, {{ order.billing_state }} {{ order.billing_zip }}<br>
+                            {{ order.billing_country }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Shipping Information -->
+            <div class="section">
+                <div class="section-title">Shipping Information</div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <span class="info-label">Name:</span>
+                        <span class="info-value">{{ order.shipping_name }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Address:</span>
+                        <span class="info-value">
+                            {{ order.shipping_address }}<br>
+                            {{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_zip }}<br>
+                            {{ order.shipping_country }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Order Items -->
+            <div class="section">
+                <div class="section-title">Your Order</div>
+                {% for item in order.items.all %}
+                <div class="order-item">
+                    <div class="item-name">{{ item.product.name }}</div>
+                    <div class="item-details">
+                        <div class="item-info">
+                            {% if item.product.sku %}SKU: {{ item.product.sku }} | {% endif %}
+                            Quantity: {{ item.quantity }}
+                        </div>
+                        <div class="item-price">PKR {{ item.get_total }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Order Summary -->
+            <div class="section">
+                <div class="section-title">Order Summary</div>
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span>PKR {{ order.subtotal }}</span>
+                    </div>
+                    {% if order.tax %}
+                    <div class="summary-row">
+                        <span>Tax:</span>
+                        <span>PKR {{ order.tax }}</span>
+                    </div>
+                    {% endif %}
+                    {% if order.shipping_cost %}
+                    <div class="summary-row">
+                        <span>Shipping:</span>
+                        <span>PKR {{ order.shipping_cost }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="summary-row summary-total">
+                        <span>Total:</span>
+                        <span>PKR {{ order.total }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            {% if order.customer_notes %}
+            <!-- Customer Notes -->
+            <div class="section">
+                <div class="section-title">Your Notes</div>
+                <div class="info-grid">
+                    <p style="color: #4a5568; font-style: italic;">{{ order.customer_notes }}</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- What's Next -->
+            <div class="next-steps">
+                <h3>🚀 What's Next?</h3>
+                <ul>
+                    <li>We'll process your order within 1-2 business days</li>
+                    <li>You'll receive a shipping confirmation with tracking details</li>
+                    <li>Your premium shawls will be carefully packaged for safe delivery</li>
+                    <li>Estimated delivery: 3-7 business days</li>
+                </ul>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <h3>📞 Need Help?</h3>
+                <div class="contact-details">
+                    <p><strong>Email:</strong> info@oraagh.com</p>
+                    <p><strong>Phone:</strong> +92 300 1234567</p>
+                    <p style="margin-top: 15px;">
+                        <a href="{{ request.scheme }}://{{ request.get_host }}/accounts/profile/" 
+                           style="color: #8B4513; text-decoration: none; font-weight: bold;">
+                            Track Your Order →
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="brand">Oraagh</div>
+            <p>Thank you for choosing us for your premium shawl and fashion needs!</p>
+            <p style="margin-top: 15px; font-size: 12px;">
+                This is an automated message. For support, contact us at info@oraagh.com
+            </p>
+        </div>
+    </div>
+</body>
+</html>

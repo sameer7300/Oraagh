@@ -1,0 +1,112 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block page_title %}{% if is_edit %}Edit Product{% else %}Add New Product{% endif %}{% endblock %}
+{% block page_description %}{% if is_edit %}Update product details and information{% else %}Create a new product in the system{% endif %}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Back Button -->
+    <div class="mb-6">
+        <a href="{% url 'admin_dashboard:product_list' %}" class="text-gray-600 hover:text-gray-800 flex items-center">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back to Products
+        </a>
+    </div>
+    
+    <!-- Form Card -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-red-500 to-orange-500 px-6 py-4">
+            <h2 class="text-xl font-bold text-white flex items-center">
+                <i class="fas {% if is_edit %}fa-edit{% else %}fa-plus{% endif %} mr-2"></i>
+                {% if is_edit %}Edit Product{% else %}Add New Product{% endif %}
+            </h2>
+        </div>
+        
+        <form method="post" enctype="multipart/form-data" class="p-6 space-y-8">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="space-y-6">
+                    {{ form.name.label_tag }}
+                    {{ form.name }}
+                    {{ form.category.label_tag }}
+                    {{ form.category }}
+                    {{ form.sku.label_tag }}
+                    {{ form.sku }}
+                    {{ form.price.label_tag }}
+                    {{ form.price }}
+                </div>
+                <div class="space-y-6">
+                    {{ form.stock_quantity.label_tag }}
+                    {{ form.stock_quantity }}
+                    {{ form.mineral_type.label_tag }}
+                    {{ form.mineral_type }}
+                    {{ form.weight.label_tag }}
+                    {{ form.weight }}
+                    {{ form.weight_unit.label_tag }}
+                    {{ form.weight_unit }}
+                </div>
+            </div>
+            <div>
+                {{ form.description.label_tag }}
+                {{ form.description }}
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <div class="flex justify-end gap-4">
+                    <a href="{% url 'admin_dashboard:product_list' %}" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-center">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn-primary text-white px-8 py-3 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-save mr-2"></i>
+                        {% if is_edit %}Update Product{% else %}Create Product{% endif %}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {% if is_edit %}
+    <div class="bg-white rounded-xl shadow-lg mt-8">
+        <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
+            <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                <i class="fas fa-images mr-2"></i>
+                Manage Media
+            </h3>
+        </div>
+        <div class="p-6">
+            <h4 class="text-lg font-semibold text-gray-700 mb-4">Current Gallery</h4>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
+                {% for media in product.media.all %}
+                <div class="relative group">
+                    <img src="{{ media.media_file.url }}" alt="{{ media.caption|default:'Product media' }}" class="rounded-lg object-cover w-full h-32">
+                    <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
+                        <a href="{% url 'admin_dashboard:product_media_delete' media.id %}" onclick="return confirm('Are you sure?')" class="text-white text-2xl" title="Delete Media">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-gray-500 col-span-full">No media uploaded for this product yet.</p>
+                {% endfor %}
+            </div>
+
+            <h4 class="text-lg font-semibold text-gray-700 mb-4 mt-8 pt-6 border-t border-gray-200">Upload New Media</h4>
+            <form action="{% url 'admin_dashboard:product_media_add' product.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div>
+                    <label for="media_files" class="block text-sm font-medium text-gray-700">Select images to upload</label>
+                    <input type="file" name="media_files" id="media_files" multiple required class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100"/>
+                </div>
+                <div class="mt-4">
+                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center">
+                        <i class="fas fa-upload mr-2"></i>
+                        Upload Files
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

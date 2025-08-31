@@ -1,0 +1,77 @@
+🎉 ORDER CONFIRMATION - {{ order.order_number }}
+
+Dear {{ user.get_full_name|default:order.billing_name }},
+
+Thank you for your order with Oraagh! We're excited to help you add these premium shawls and elegant fashion pieces to your collection.
+
+ORDER DETAILS:
+==============
+Order Number: {{ order.order_number }}
+Order Date: {{ order.created_at|date:"F d, Y at g:i A" }}
+Order Status: {{ order.get_status_display }}
+Payment Method: {{ order.payment_method }}
+
+BILLING INFORMATION:
+===================
+{{ order.billing_name }}
+{{ order.billing_address }}
+{{ order.billing_city }}, {{ order.billing_state }} {{ order.billing_zip }}
+{{ order.billing_country }}
+Phone: {{ order.billing_phone }}
+Email: {{ order.billing_email }}
+
+SHIPPING INFORMATION:
+====================
+{{ order.shipping_name }}
+{{ order.shipping_address }}
+{{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_zip }}
+{{ order.shipping_country }}
+
+YOUR ORDER:
+===========
+{% for item in order.items.all %}
+{{ item.product.name }}
+{% if item.product.sku %}SKU: {{ item.product.sku }}{% endif %}
+Quantity: {{ item.quantity }}
+Price: PKR {{ item.product.price }}
+Subtotal: PKR {{ item.get_total }}
+
+{% endfor %}
+
+ORDER SUMMARY:
+=============
+Subtotal: PKR {{ order.subtotal }}
+{% if order.tax %}Tax: PKR {{ order.tax }}{% endif %}
+{% if order.shipping_cost %}Shipping: PKR {{ order.shipping_cost }}{% endif %}
+Total: PKR {{ order.total }}
+
+{% if order.customer_notes %}
+YOUR NOTES:
+===========
+{{ order.customer_notes }}
+{% endif %}
+
+WHAT'S NEXT:
+============
+• We'll process your order within 1-2 business days
+• You'll receive a shipping confirmation with tracking details
+• Your premium shawls will be carefully packaged for safe delivery
+• Estimated delivery: 3-7 business days
+
+NEED HELP?
+==========
+If you have any questions about your order, please contact us:
+📧 Email: info@oraagh.com
+📞 Phone: +92 300 1234567
+
+You can also track your order status by logging into your account:
+{{ request.scheme }}://{{ request.get_host }}/accounts/profile/
+
+Thank you for choosing Oraagh for your premium shawl and fashion needs!
+
+Best regards,
+The Oraagh Team
+
+---
+This is an automated message. Please do not reply to this email.
+For support, contact us at info@oraagh.com

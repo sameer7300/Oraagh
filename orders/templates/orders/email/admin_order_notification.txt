@@ -1,0 +1,69 @@
+🎉 NEW ORDER RECEIVED - {{ order.order_number }}
+
+Dear Admin,
+
+A new order has been placed on Timeless Cart!
+
+ORDER DETAILS:
+==============
+Order Number: {{ order.order_number }}
+Order Date: {{ order.created_at|date:"F d, Y at g:i A" }}
+Order Status: {{ order.get_status_display }}
+Payment Method: {{ order.payment_method }}
+
+CUSTOMER INFORMATION:
+====================
+Name: {{ user.get_full_name }}
+Email: {{ user.email }}
+Username: {{ user.username }}
+
+BILLING ADDRESS:
+===============
+{{ order.billing_name }}
+{{ order.billing_address }}
+{{ order.billing_city }}, {{ order.billing_state }} {{ order.billing_zip }}
+{{ order.billing_country }}
+Phone: {{ order.billing_phone }}
+Email: {{ order.billing_email }}
+
+SHIPPING ADDRESS:
+================
+{{ order.shipping_name }}
+{{ order.shipping_address }}
+{{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_zip }}
+{{ order.shipping_country }}
+
+ORDER ITEMS:
+===========
+{% for item in order.items.all %}
+- {{ item.product.name }} (SKU: {{ item.product.sku|default:"N/A" }})
+  Quantity: {{ item.quantity }}
+  Price: PKR {{ item.product.price }}
+  Subtotal: PKR {{ item.get_total }}
+{% endfor %}
+
+ORDER SUMMARY:
+=============
+Subtotal: PKR {{ order.subtotal }}
+Tax: PKR {{ order.tax|default:"0.00" }}
+Shipping: PKR {{ order.shipping_cost|default:"0.00" }}
+Total: PKR {{ order.total }}
+
+{% if order.customer_notes %}
+CUSTOMER NOTES:
+==============
+{{ order.customer_notes }}
+{% endif %}
+
+NEXT STEPS:
+==========
+1. Process the order in the admin panel
+2. Prepare items for shipping
+3. Update order status as needed
+4. Contact customer if any issues arise
+
+You can view the full order details in the admin panel:
+{{ request.scheme }}://{{ request.get_host }}/admin/orders/order/{{ order.id }}/
+
+Best regards,
+Timeless Cart System

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ lease.name }} - Lease PDF</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; color: #222; }
+        h1 { color: #b91c1c; }
+        h2 { color: #b91c1c; margin-top: 1em; }
+        .section { margin-bottom: 1.5em; }
+        .team, .media { margin-left: 1em; }
+        .media img { max-width: 200px; max-height: 120px; margin: 0.5em 0; }
+        .media video { display: none; }
+        .related { font-size: 11px; color: #555; }
+    </style>
+</head>
+<body>
+    <h1>{{ lease.name }}</h1>
+    <div class="section">
+        <strong>Mineral Type:</strong> {{ lease.mineral_type }}<br>
+        <strong>Status:</strong> {{ lease.operational_status }}<br>
+        <strong>Size:</strong> {{ lease.size }}<br>
+        <strong>Location:</strong> {{ lease.location }}<br>
+        <strong>Start Date:</strong> {{ lease.start_date }}<br>
+        <strong>End Date:</strong> {{ lease.end_date }}<br>
+        <strong>Description:</strong> {{ lease.description }}
+    </div>
+    <h2>Team Members</h2>
+    <ul class="team">
+        {% for member in team_members %}
+            <li>{{ member.name }} - {{ member.role }}</li>
+        {% empty %}
+            <li>No team members listed.</li>
+        {% endfor %}
+    </ul>
+    <h2>Media</h2>
+    <div class="media">
+        {% for m in media %}
+            {% if not m.is_video %}
+                <img src="{{ m.media_file.url }}" alt="{{ m.caption }}" />
+                {% if m.caption %}<div>{{ m.caption }}</div>{% endif %}
+            {% endif %}
+        {% empty %}
+            <div>No media available.</div>
+        {% endfor %}
+    </div>
+    <h2>Related Leases</h2>
+    <ul class="related">
+        {% for rel in related_leases %}
+            <li>{{ rel.name }} ({{ rel.location }})</li>
+        {% empty %}
+            <li>No related leases found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html> 

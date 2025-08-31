@@ -1,0 +1,48 @@
+{% extends 'core/policy_base.html' %}
+
+{% block policy_title %}Cookie Policy{% endblock %}
+
+{% block policy_subtitle %}
+    How we use cookies to improve your experience on our website.
+{% endblock %}
+
+{% block policy_nav %}
+    <li class="policy-nav-item"><a href="#what-are-cookies" class="text-gray-600 dark:text-gray-300 hover:text-red-500">What Are Cookies?</a></li>
+    <li class="policy-nav-item"><a href="#how-we-use-cookies" class="text-gray-600 dark:text-gray-300 hover:text-red-500">How We Use Cookies</a></li>
+    <li class="policy-nav-item"><a href="#types-of-cookies" class="text-gray-600 dark:text-gray-300 hover:text-red-500">Types of Cookies</a></li>
+    <li class="policy-nav-item"><a href="#consent-cookie" class="text-gray-600 dark:text-gray-300 hover:text-red-500">Your Consent</a></li>
+    <li class="policy-nav-item"><a href="#managing-cookies" class="text-gray-600 dark:text-gray-300 hover:text-red-500">Managing Cookies</a></li>
+    <li class="policy-nav-item"><a href="#contact" class="text-gray-600 dark:text-gray-300 hover:text-red-500">Contact Us</a></li>
+{% endblock %}
+
+{% block policy_content %}
+    <section id="what-are-cookies" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">1. What Are Cookies?</h2>
+        <p>Cookies are small text files that are placed on your computer or mobile device when you visit a website. They are widely used to make websites work, or work more efficiently, as well as to provide information to the owners of the site.</p>
+    </section>
+
+    <section id="how-we-use-cookies" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">2. How We Use Cookies</h2>
+        <p>We use cookies to understand how you use our website, such as which pages you visit and what links you click on. This helps us to analyze our web traffic and improve our site in order to tailor it to customer needs. We only use this information for statistical analysis purposes.</p>
+    </section>
+
+    <section id="types-of-cookies" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">3. Types of Cookies We Use</h2>
+        <p>We use both session cookies (which expire once you close your web browser) and persistent cookies (which stay on your device for a set period of time or until you delete them). We use the following types of cookies: essential, performance, and functionality cookies.</p>
+    </section>
+
+    <section id="consent-cookie" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">4. Your Consent</h2>
+        <p>When you first visit our website, you will see a banner asking for your consent to use cookies. We use a specific cookie, <code>cookie_consent</code>, to store your preference. This cookie will remember whether you clicked "Accept" or "Deny" and will be stored for 365 days, after which you will be asked for your consent again. This helps us respect your choice on subsequent visits without repeatedly showing you the banner.</p>
+    </section>
+
+    <section id="managing-cookies" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">5. Managing Cookies</h2>
+        <p>You can control and/or delete cookies as you wish. You can delete all cookies that are already on your computer and you can set most browsers to prevent them from being placed. If you do this, however, you may have to manually adjust some preferences every time you visit a site and some services and functionalities may not work.</p>
+    </section>
+
+    <section id="contact" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">6. Contact Us</h2>
+        <p>If you have any questions about our use of cookies, please contact us at <a href="mailto:info@oraagh.com" class="text-red-500 hover:underline">info@oraagh.com</a>.</p>
+    </section>
+{% endblock %}

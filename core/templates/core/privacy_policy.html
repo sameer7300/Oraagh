@@ -1,0 +1,42 @@
+{% extends 'core/policy_base.html' %}
+
+{% block policy_title %}Privacy Policy{% endblock %}
+
+{% block policy_subtitle %}
+    How we collect, use, and protect your personal information.
+{% endblock %}
+
+{% block policy_nav %}
+    <li class="policy-nav-item"><a href="#introduction" class="text-gray-600 dark:text-gray-300 hover:text-red-500">Introduction</a></li>
+    <li class="policy-nav-item"><a href="#information-collection" class="text-gray-600 dark:text-gray-300 hover:text-red-500">Information Collection</a></li>
+    <li class="policy-nav-item"><a href="#use-of-information" class="text-gray-600 dark:text-gray-300 hover:text-red-500">Use of Information</a></li>
+    <li class="policy-nav-item"><a href="#data-security" class="text-gray-600 dark:text-gray-300 hover:text-red-500">Data Security</a></li>
+    <li class="policy-nav-item"><a href="#contact" class="text-gray-600 dark:text-gray-300 hover:text-red-500">Contact Us</a></li>
+{% endblock %}
+
+{% block policy_content %}
+    <section id="introduction" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">1. Introduction</h2>
+        <p>Oraagh is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.</p>
+    </section>
+
+    <section id="information-collection" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">2. Information We Collect</h2>
+        <p>We may collect personal information from you such as your name, email address, and phone number when you voluntarily provide it to us. We also automatically collect certain information when you visit our website, such as your IP address and browsing behavior.</p>
+    </section>
+
+    <section id="use-of-information" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">3. Use of Information</h2>
+        <p>We use the information we collect to operate and maintain our website, send you marketing communications, respond to your comments and questions, and to provide and improve our services.</p>
+    </section>
+
+    <section id="data-security" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">4. Data Security</h2>
+        <p>We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable.</p>
+    </section>
+
+    <section id="contact" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">5. Contact Us</h2>
+        <p>If you have any questions about this Privacy Policy, please contact us at <a href="mailto:info@oraagh.com" class="text-red-500 hover:underline">info@oraagh.com</a>.</p>
+    </section>
+{% endblock %}

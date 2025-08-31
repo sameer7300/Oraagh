@@ -1,0 +1,1338 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Oraagh Swals - Premium Shawl Collection{% endblock %}
+
+{% block extra_head%}
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary-brown: #8B4513;
+        --primary-brown-dark: #654321;
+        --accent-cream: #F5F5DC;
+        --neutral-black: #000000;
+        --neutral-brown-light: #A0522D;
+        --background-cream: #F5F5DC;
+        --background-cream-light: #FEFEFE;
+        --glass-bg: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.2);
+        --shimmer: linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 0.3) 50%, transparent 60%);
+    }
+    
+    /* Enhanced Glassmorphism */
+    .glass {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    
+    .glass-dark {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(25px) saturate(200%);
+        -webkit-backdrop-filter: blur(25px) saturate(200%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Advanced Animations */
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(200%); }
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        33% { transform: translateY(-15px) rotate(1deg); }
+        66% { transform: translateY(-10px) rotate(-1deg); }
+    }
+    
+    @keyframes glow {
+        0%, 100% { box-shadow: 0 0 30px rgba(139, 69, 19, 0.3); }
+        50% { box-shadow: 0 0 50px rgba(139, 69, 19, 0.6), 0 0 80px rgba(139, 69, 19, 0.3); }
+    }
+    
+    @keyframes morphing {
+        0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+        25% { border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%; }
+        50% { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; }
+        75% { border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%; }
+    }
+    
+    @keyframes parallax-float {
+        0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+        33% { transform: translateY(-20px) translateX(10px) scale(1.05); }
+        66% { transform: translateY(-5px) translateX(-5px) scale(0.95); }
+    }
+    
+    @keyframes typewriter {
+        from { width: 0; }
+        to { width: 100%; }
+    }
+    
+    @keyframes blink {
+        0%, 50% { border-color: transparent; }
+        51%, 100% { border-color: #D4AF37; }
+    }
+    
+    @keyframes slideInFromLeft {
+        0% { transform: translateX(-100%) scale(0.8); opacity: 0; }
+        100% { transform: translateX(0) scale(1); opacity: 1; }
+    }
+    
+    @keyframes slideInFromRight {
+        0% { transform: translateX(100%) scale(0.8); opacity: 0; }
+        100% { transform: translateX(0) scale(1); opacity: 1; }
+    }
+    
+    @keyframes fadeInScale {
+        0% { transform: scale(0.5) rotate(-5deg); opacity: 0; }
+        50% { transform: scale(1.1) rotate(2deg); opacity: 0.8; }
+        100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    
+    @keyframes textGlow {
+        0%, 100% { 
+            text-shadow: 
+                0 0 20px rgba(245, 245, 220, 0.8),
+                0 0 40px rgba(245, 245, 220, 0.6),
+                0 0 60px rgba(139, 69, 19, 0.4),
+                0 2px 8px rgba(0,0,0,0.8);
+        }
+        50% { 
+            text-shadow: 
+                0 0 30px rgba(245, 245, 220, 1),
+                0 0 60px rgba(245, 245, 220, 0.8),
+                0 0 90px rgba(139, 69, 19, 0.6),
+                0 2px 8px rgba(0,0,0,0.8);
+        }
+    }
+    
+    @keyframes letterFloat {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes parallaxMove {
+        0% { transform: translateY(0px); }
+        100% { transform: translateY(-50px); }
+    }
+   
+    /* Simplified Hero Effects */
+    .hero-enhanced-blur {
+        background: linear-gradient(135deg, 
+            rgba(0,0,0,0.9) 0%, 
+            rgba(139,69,19,0.15) 25%,
+            rgba(0,0,0,0.85) 50%,
+            rgba(160,82,45,0.1) 75%,
+            rgba(0,0,0,0.95) 100%);
+        backdrop-filter: blur(8px) brightness(0.4) contrast(1.2) saturate(1.3);
+        -webkit-backdrop-filter: blur(8px) brightness(0.4) contrast(1.2) saturate(1.3);
+        /*
+         rgba(0,0,0,0.8) 0%, 
+            rgba(139,69,19,0.1) 50%,
+            rgba(0,0,0,0.9) 100%);
+        */
+    }
+    
+    .hero-text-glow {
+        text-shadow: 
+            0 2px 4px rgba(0,0,0,0.8),
+            0 0 8px rgba(245, 245, 220, 0.3);
+    }
+    
+    /* Simplified Cards - Fixed */
+    .card-3d {
+        transition: all 0.3s ease;
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .card-3d:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 10px 30px rgba(139, 69, 19, 0.2);
+    }
+    
+    /* Remove complex pseudo-elements that may cause issues */
+    
+    /* Simplified Gradient Text */
+    .luxury-gradient {
+        background: linear-gradient(135deg, #D4AF37 0%, #8B4513 50%, #A0522D 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        background-size: 200% 200%;
+        animation: gradientShift 3s ease-in-out infinite;
+    }
+    
+    @keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    
+    /* Enhanced Morphing Shapes */
+    .morphing-bg {
+        position: absolute;
+        background: linear-gradient(135deg, rgba(139, 69, 19, 0.05), rgba(245, 245, 220, 0.05));
+        filter: blur(20px);
+    }
+    
+    /* Advanced Button Styles */
+    .btn-premium {
+        background: linear-gradient(135deg, rgba(139, 69, 19, 0.9), rgba(101, 67, 33, 0.9));
+        border: 1px solid rgba(245, 245, 220, 0.3);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+    }
+    
+    /* Removed complex pseudo-elements */
+    
+    .btn-premium:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(139, 69, 19, 0.3);
+        background: linear-gradient(135deg, rgba(101, 67, 33, 0.95), rgba(93, 78, 55, 0.95));
+    }
+    
+    .btn-secondary {
+        background: rgba(245, 245, 220, 0.15);
+        border: 2px solid rgba(160, 82, 45, 0.8);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+    }
+    
+    .btn-secondary:hover {
+        background: rgba(245, 245, 220, 0.25);
+        border-color: rgba(139, 69, 19, 0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(160, 82, 45, 0.2);
+    }
+    
+    /* Simplified Section Dividers */
+    .animated-divider {
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #8B4513, #A0522D, #8B4513, transparent);
+        background-size: 200% 100%;
+        animation: dividerGlow 3s ease-in-out infinite;
+        border-radius: 2px;
+        box-shadow: 0 0 10px rgba(139, 69, 19, 0.5);
+    }
+    
+    @keyframes dividerGlow {
+        0%, 100% { background-position: -200% center; }
+        50% { background-position: 200% center; }
+    }
+    
+    /* Enhanced Scroll Animations */
+    .fade-in-up {
+        opacity: 0;
+        transform: translateY(60px);
+        transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .fade-in-up.animate {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .slide-in-left {
+        opacity: 0;
+        transform: translateX(-80px) scale(0.9);
+        transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .slide-in-left.animate {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+    
+    .slide-in-right {
+        opacity: 0;
+        transform: translateX(80px) scale(0.9);
+        transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .slide-in-right.animate {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+    
+    .stagger-delay-1 { transition-delay: 0.1s; }
+    .stagger-delay-2 { transition-delay: 0.2s; }
+    .stagger-delay-3 { transition-delay: 0.3s; }
+    .stagger-delay-4 { transition-delay: 0.4s; }
+    .stagger-delay-5 { transition-delay: 0.5s; }
+    .stagger-delay-6 { transition-delay: 0.6s; }
+    
+    /* Premium Background Patterns */
+   
+    /* Enhanced Typography */
+    .display-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+    }
+    
+    .script-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 300;
+        letter-spacing: 0.1em;
+    }
+    
+    /* Interactive Elements */
+    .interactive-card {
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .interactive-card:hover {
+        transform: translateY(-8px) scale(1.02);
+    }
+    
+    /* Mobile Optimizations */
+    @media (max-width: 768px) {
+        .hero-enhanced-blur {
+            backdrop-filter: blur(4px) brightness(0.5);
+        }
+        
+        .card-3d:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+        
+        .morphing-bg {
+            filter: blur(20px);
+            display: none; /* Hide morphing elements on mobile for better performance */
+        }
+        
+        /* Mobile Hero Text Adjustments */
+        .display-title {
+            font-size: 3rem !important; /* Override large text sizes */
+            line-height: 1.1;
+        }
+        
+        .script-title {
+            font-size: 1.25rem !important;
+            margin-top: 1rem !important;
+        }
+        
+        /* Mobile Hero Container */
+        .hero-container {
+            padding: 2rem 1rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Mobile CTA Buttons */
+        .btn-premium, .btn-secondary {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        
+        /* Mobile Background */
+        .hero-bg-mobile {
+            background-attachment: scroll !important;
+            background-size: cover;
+            background-position: center;
+        }
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+    }
+    
+    /* Scroll-triggered elements */
+    .reveal {
+        opacity: 1;
+        transform: translateY(0);
+        transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .reveal.animate {
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Featured Products Slider Styles */
+    .featured-products-slider {
+        position: relative;
+    }
+    
+    .featured-products-slider:hover .slider-nav {
+        opacity: 1;
+    }
+    
+    .slider-nav {
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+    
+    .slider-nav:hover {
+        transform: translateY(-50%) scale(1.1);
+    }
+    
+    .slider-track {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1rem;
+    }
+    
+    .slider-container {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+    
+    .slider-item {
+        flex: none;
+    }
+    
+    .slider-dots {
+        margin-top: 2rem;
+    }
+    
+    .slider-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(120, 113, 108, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .slider-dot.active {
+        background: linear-gradient(135deg, #8B5A3C, #D4A574);
+        transform: scale(1.2);
+    }
+    
+    .slider-dot:hover {
+        background: rgba(120, 113, 108, 0.6);
+        transform: scale(1.1);
+    }
+    
+    /* Responsive slider behavior */
+    @media (max-width: 640px) {
+        .slider-item {
+            width: 100% !important;
+        }
+    }
+    
+    @media (min-width: 641px) and (max-width: 1024px) {
+        .slider-item {
+            width: 50% !important;
+        }
+    }
+    
+    @media (min-width: 1025px) and (max-width: 1280px) {
+        .slider-item {
+            width: 33.333% !important;
+        }
+    }
+    
+    @media (min-width: 1281px) {
+        .slider-item {
+            width: 25% !important;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Enhanced Hero Section with Advanced Effects -->
+<section class="relative min-h-screen overflow-hidden">
+    <!-- Fixed Parallax Background -->
+    <div class="absolute inset-0 hero-bg-mobile" style="background-attachment: fixed; background-image: url('media/oraagh2.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <div class="hero-enhanced-blur absolute inset-0"></div>
+    </div>
+    
+    <!-- Enhanced Parallax Morphing Elements -->
+    <div class="absolute inset-0 overflow-hidden parallax-container">
+        <div class="morphing-bg absolute top-10 left-10 w-64 h-64 parallax-element" data-speed="0.5"></div>
+        <div class="morphing-bg absolute bottom-20 right-16 w-80 h-80 parallax-element" data-speed="0.3" style="animation-delay: -7s;"></div>
+        <div class="morphing-bg absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 parallax-element" data-speed="0.7" style="animation-delay: -14s;"></div>
+        <div class="morphing-bg absolute top-20 right-1/4 w-48 h-48 parallax-element" data-speed="0.4" style="animation-delay: -3s;"></div>
+        <div class="morphing-bg absolute bottom-1/4 left-1/4 w-56 h-56 parallax-element" data-speed="0.6" style="animation-delay: -10s;"></div>
+    </div>
+    
+    <div class="relative container mx-auto px-4 py-20 lg:py-32 flex items-center justify-center min-h-screen">
+        <div class="text-center max-w-7xl mx-auto space-y-12 lg:space-y-20">
+            
+            <!-- Enhanced Main Headline -->
+            <div class="space-y-8">
+                <h1 class="display-title text-8xl md:text-9xl lg:text-[12rem] leading-none">
+                    <span class="block relative hero-text-glow animated-title" style="color: wheat; animation: textGlow 3s ease-in-out infinite;">
+                        <span class="relative z-10 inline-block" style="font-family: Pacifico;">ORAAGH</span>
+                        <div class="absolute inset-0 z-0 glass-dark rounded-3xl transform skew-y-1 opacity-20"></div>
+                    </span>
+                    <span class="script-title block text-2xl md:text-4xl lg:text-5xl mt-6" style="color: white; animation: slideInFromRight 1.5s ease-out 0.5s both; font-style: italic; font-family: dancing script;">
+                        Draped in Stories
+                    </span>
+                </h1>
+                
+                <p class="text-xl md:text-3xl lg:text-4xl max-w-5xl mx-auto leading-relaxed font-light" style="color: #FDF5E6; font-family: 'Inter', sans-serif; animation: fadeInScale 2s ease-out 1s both;">
+                    <span class="inline-block" style="animation: slideInFromLeft 1s ease-out 1.5s both;">Discover the art of</span> 
+                    <span class="luxury-gradient font-semibold inline-block" style="animation: fadeInScale 1s ease-out 2s both;">timeless elegance</span>
+                    <br class="hidden md:block">
+                    <span class="inline-block" style="animation: slideInFromRight 1s ease-out 2.5s both;">woven into every thread of perfection</span>
+                </p>
+            </div>
+            
+            <!-- Premium CTA Section -->
+            <div class="space-y-8 lg:space-y-10" style="animation: fadeInScale 1.5s ease-out 3s both;">
+                <div class="flex flex-col sm:flex-row gap-6 lg:gap-10 justify-center">
+                    <a href="{% url 'products:product_list' %}" 
+                       class="group btn-premium font-bold py-6 px-14 rounded-full text-xl tracking-wide text-white shadow-2xl">
+                        <span class="relative z-10 flex items-center justify-center">
+                            <svg class="w-7 h-7 mr-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                            </svg>
+                            Explore Masterpieces
+                        </span>
+                    </a>
+                    <a href="{% url 'products:product_list' %}" 
+                       class="group btn-secondary font-bold py-6 px-14 rounded-full text-xl tracking-wide text-white shadow-2xl">
+                        <span class="relative z-10 flex items-center justify-center text-white">
+                            <svg class="w-7 h-7 mr-4 group-hover:scale-110 transition-transform " fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                            </svg>
+                            Browse Collections
+                        </span>
+                    </a>
+                </div>
+                
+                <!-- Enhanced Visual Elements with Parallax -->
+                <div class="flex justify-center items-center gap-8 pt-10 parallax-element" data-speed="0.2" style="animation: fadeInScale 1.5s ease-out 3.5s both;">
+                    <div class="w-3 h-3 rounded-full animate-pulse parallax-element" data-speed="0.1" style="background: #D4AF37; animation: glow 2s infinite, letterFloat 3s ease-in-out infinite;"></div>
+                    <div class="animated-divider w-20 h-1 parallax-element" data-speed="0.15"></div>
+                    <div class="w-4 h-4 rounded-full animate-pulse parallax-element" data-speed="0.25" style="background: #8B4513; animation: glow 2s infinite, letterFloat 3s ease-in-out infinite; animation-delay: 0.7s;"></div>
+                    <div class="animated-divider w-20 h-1 parallax-element" data-speed="0.15"></div>
+                    <div class="w-3 h-3 rounded-full animate-pulse parallax-element" data-speed="0.1" style="background: #A0522D; animation: glow 2s infinite, letterFloat 3s ease-in-out infinite; animation-delay: 1.4s;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Enhanced Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+        <div class="glass flex flex-col items-center p-4 rounded-2xl text-white backdrop-blur-lg">
+            <span class="text-sm mb-3 script-title">Discover More</span>
+            <div class="animate-bounce">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Enhanced Featured Products Section -->
+<section class="py-32 luxury-pattern bg-gradient-to-br from-stone-50 via-white to-stone-100 relative overflow-hidden">
+    <div class="container mx-auto px-4 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20 reveal">
+                <h2 class="display-title text-7xl md:text-8xl text-stone-800 mb-8">
+                    Featured <span class="luxury-gradient">Treasures</span>
+                </h2>
+                <div class="animated-divider max-w-md mx-auto mb-8"></div>
+                <p class="text-2xl text-stone-700 max-w-4xl mx-auto leading-relaxed font-light" style="font-family: 'Inter', sans-serif;">
+                    Handpicked masterpieces that embody the essence of luxury and craftsmanship
+                </p>
+            </div>
+            
+            {% if featured_products %}
+            <!-- Featured Products Slider Container -->
+            <div class="featured-products-slider relative">
+                <!-- Slider Navigation Buttons -->
+                <button class="slider-nav slider-prev absolute left-4 top-1/2 transform -translate-y-1/2 z-10 glass bg-white/80 hover:bg-white/90 text-stone-800 p-3 rounded-full shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button class="slider-nav slider-next absolute right-4 top-1/2 transform -translate-y-1/2 z-10 glass bg-white/80 hover:bg-white/90 text-stone-800 p-3 rounded-full shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+                
+                <!-- Slider Track -->
+                <div class="slider-track overflow-hidden">
+                    <div class="slider-container flex transition-transform duration-500 ease-in-out gap-10">
+                        {% for product in featured_products %}
+                        <div class="slider-item flex-none w-full md:w-1/2 lg:w-1/3 xl:w-1/4">
+                            <div class="card-3d glass bg-white/80 rounded-3xl overflow-hidden shadow-2xl border border-stone-200/50 relative group reveal stagger-delay-{{ forloop.counter }}">
+                    <div class="absolute top-6 left-6 z-20">
+                        <span class="glass-dark px-4 py-2 rounded-full text-sm font-semibold text-white shadow-lg backdrop-blur-sm">
+                            ✨ Featured
+                        </span>
+                    </div>
+                    {% if product.media.first %}
+                        <div class="h-72 bg-cover bg-center relative overflow-hidden" style="background-image: url('{{ product.media.first.media_file.url }}');">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent group-hover:from-black/30 transition-all duration-500"></div>
+                        </div>
+                    {% else %}
+                        <div class="h-72 bg-gradient-to-br from-stone-400 via-stone-500 to-stone-600 flex items-center justify-center relative overflow-hidden">
+                            <svg class="w-20 h-20 text-white opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
+                        </div>
+                    {% endif %}
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-stone-900 mb-4 leading-tight display-title">{{ product.name }}</h3>
+                        <p class="text-stone-600 mb-6 leading-relaxed">{{ product.description|truncatewords:15|striptags }}</p>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-sm text-stone-500">
+                                <span class="glass px-3 py-1 rounded-full font-medium">{{ product.get_condition_display }}</span>
+                            </div>
+                            {% if product.price %}
+                            <div class="text-2xl font-bold luxury-gradient display-title">
+                                PKR {{ product.price }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="flex gap-3">
+                            <a href="{{ product.get_absolute_url }}" 
+                               class="flex-1 btn-premium text-white text-center py-3 px-6 rounded-xl font-semibold transition-all">
+                                View Details
+                            </a>
+                            <form method="post" action="{% url 'orders:add_to_cart' product.id %}" class="flex-1">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <button type="submit" 
+                                        class="w-full glass bg-white/50 text-stone-800 py-3 px-6 rounded-xl font-semibold hover:bg-white/70 transition-all">
+                                    Add to Cart
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Slider Dots Indicator -->
+                <div class="slider-dots flex justify-center mt-8 space-x-2">
+                    <!-- Dots will be generated by JavaScript -->
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center py-16 reveal">
+                <div class="glass rounded-3xl p-12 max-w-2xl mx-auto">
+                    <h3 class="text-3xl font-bold text-stone-800 mb-4">Coming Soon</h3>
+                    <p class="text-xl text-stone-600 font-light mb-6">Our featured collection is being curated with the finest pieces.</p>
+                    <a href="{% url 'products:product_list' %}" class="btn-premium text-white px-8 py-3 rounded-xl font-semibold transition-all">
+                        Browse All Products
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Enhanced Categories Section -->
+<section id="categories" class="py-32 bg-gradient-to-b from-white via-stone-50/50 to-white relative overflow-hidden luxury-pattern">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-24 reveal">
+            <h2 class="display-title text-7xl md:text-8xl text-stone-800 mb-8">
+                Shop by <span class="luxury-gradient">Category</span>
+            </h2>
+            <div class="animated-divider max-w-lg mx-auto mb-8"></div>
+            <p class="text-2xl text-stone-700 max-w-4xl mx-auto leading-relaxed font-light" style="font-family: 'Inter', sans-serif;">
+                Explore our meticulously curated collections across different categories
+            </p>
+        </div>
+        
+        {% if categories %}
+        <div class="relative max-w-7xl mx-auto">
+            <!-- Enhanced Categories Slider Container -->
+            <div class="overflow-hidden rounded-3xl">
+                <div id="categoriesSlider" class="flex transition-all duration-700 ease-out">
+                    {% for category in categories %}
+                    <div class="w-full md:w-1/2 lg:w-1/4 flex-shrink-0 px-4">
+                        <a href="{% url 'products:product_list' %}?category={{ category.slug }}" 
+                           class="group card-3d glass bg-white/60 rounded-3xl p-10 text-center relative overflow-hidden block interactive-card reveal stagger-delay-{{ forloop.counter }}">
+                            <div class="absolute inset-0 bg-gradient-to-br from-stone-400/5 to-brown-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="relative">
+                                <div class="w-20 h-20 bg-gradient-to-br from-stone-600 via-stone-700 to-stone-800 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl group-hover:scale-110 transition-all duration-500" style="animation: glow 3s infinite;">
+                                    <img src="/media/shawl-iconn.png" alt="Shawl Icon" class="w-10 h-10 object-contain filter">
+                                </div>
+                                <h3 class="text-2xl font-bold text-stone-800 mb-3 group-hover:text-stone-900 transition-colors duration-300 display-title">{{ category.name }}</h3>
+                                <p class="text-stone-500 font-medium">{{ category.products.count }} masterpieces</p>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Enhanced Navigation Buttons -->
+            <button id="prevCategory" class="absolute left-4 top-1/2 transform -translate-y-1/2 glass bg-white/80 hover:bg-white rounded-full p-4 shadow-2xl transition-all duration-300 z-20 group">
+                <svg class="w-8 h-8 text-stone-600 group-hover:text-stone-800 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            <button id="nextCategory" class="absolute right-4 top-1/2 transform -translate-y-1/2 glass bg-white/80 hover:bg-white rounded-full p-4 shadow-2xl transition-all duration-300 z-20 group">
+                <svg class="w-8 h-8 text-stone-600 group-hover:text-stone-800 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+            
+            <!-- Enhanced Dots Indicator -->
+            <div class="flex justify-center mt-12 space-x-3">
+                {% for category in categories %}
+                <button class="category-dot w-4 h-4 rounded-full bg-stone-300 hover:bg-stone-500 transition-all duration-300 relative overflow-hidden" data-slide="{{ forloop.counter0 }}">
+                    <div class="absolute inset-0 bg-gradient-to-r from-stone-600 to-stone-700 rounded-full transform scale-0 transition-transform duration-300"></div>
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Enhanced New Arrivals Section -->
+<section class="py-32 bg-gradient-to-br from-stone-100 via-slate-50 to-stone-100 relative overflow-hidden luxury-pattern">
+    <div class="container mx-auto px-4 relative">
+        <div class="text-center mb-24 reveal">
+            <h2 class="display-title text-7xl md:text-8xl mb-8 text-stone-900"> 
+                New <span class="luxury-gradient">Arrivals</span>
+            </h2>
+            <div class="animated-divider max-w-lg mx-auto mb-8"></div>
+            <p class="text-2xl text-stone-700 max-w-5xl mx-auto leading-relaxed font-light" 
+               style="font-family: 'Inter', sans-serif;">
+                Fresh discoveries and recently acquired treasures await your discerning eye
+            </p>
+        </div>
+        
+        {% if new_arrivals %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-8xl mx-auto">
+            {% for product in new_arrivals %}
+            <div class="card-3d glass bg-white/70 rounded-2xl overflow-hidden shadow-xl border border-stone-200/50 relative group reveal stagger-delay-{{ forloop.counter }}">
+                <div class="absolute top-4 left-4 z-10">
+                    <span class="glass-dark bg-emerald-500/80 text-white px-3 py-1 rounded-full text-sm font-semibold backdrop-blur-sm">
+                        ✨ New
+                    </span>
+                </div>
+                {% if product.media.first %}
+                    <div class="h-56 bg-cover bg-center relative overflow-hidden" style="background-image: url('{{ product.media.first.media_file.url }}');">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent group-hover:from-black/20 transition-all duration-500"></div>
+                    </div>
+                {% else %}
+                    <div class="h-56 bg-gradient-to-br from-stone-300 to-stone-500 flex items-center justify-center relative overflow-hidden">
+                        <svg class="w-16 h-16 text-white opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                {% endif %}
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-stone-900 mb-3 leading-tight display-title">{{ product.name }}</h3>
+                    <p class="text-stone-600 mb-4 text-sm leading-relaxed">{{ product.description|truncatewords:10|striptags }}</p>
+                    <div class="flex items-center justify-between">
+                        {% if product.price %}
+                        <span class="text-xl font-bold luxury-gradient display-title">PKR {{ product.price }}</span>
+                        {% endif %}
+                        <a href="{{ product.get_absolute_url }}" 
+                           class="text-stone-600 hover:text-stone-800 font-semibold text-sm transition-all group-hover:translate-x-1">
+                            View Details →
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-16 reveal">
+            <div class="glass rounded-3xl p-12 max-w-2xl mx-auto">
+                <h3 class="text-3xl font-bold text-stone-800 mb-4">New Arrivals Coming Soon</h3>
+                <p class="text-xl text-stone-600 font-light mb-6">We're constantly adding new treasures to our collection.</p>
+                <a href="{% url 'products:product_list' %}" class="btn-premium text-white px-8 py-3 rounded-xl font-semibold transition-all">
+                    View Current Collection
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Enhanced About Section -->
+<section class="py-32 bg-white relative overflow-hidden">
+    <div class="container mx-auto px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div class="space-y-10 reveal slide-in-left">
+                    <h2 class="display-title text-6xl text-stone-800 leading-tight"> 
+                        About <span class="luxury-gradient">ORAAGH</span>
+                    </h2>
+                    <p class="text-xl text-stone-700 leading-relaxed font-light" style="font-family: 'Inter', sans-serif;">
+                        ORAAGH is more than just a marketplace - we are custodians of heritage and craftsmanship. 
+                        Founded with a passion for preserving the beauty of unique and antique treasures, we connect 
+                        collectors worldwide with extraordinary pieces that tell stories of bygone eras.
+                    </p>
+                    <p class="text-lg text-stone-600 leading-relaxed font-light" style="font-family: 'Inter', sans-serif;">
+                        Our journey began with a simple belief: every antique deserves to be cherished, and every 
+                        collector deserves access to authentic, verified pieces. From handwoven shawls to rare artifacts, 
+                        we curate each item with meticulous care and expertise.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-center group">
+                            <div class="w-4 h-4 rounded-full mr-6 group-hover:scale-125 transition-all duration-300" style="background: linear-gradient(135deg, #8B4513, #A0522D); animation: glow 2s infinite;"></div>
+                            <span class="text-lg font-medium text-stone-800 group-hover:text-stone-900 transition-colors">Heritage & Authenticity</span>
+                        </div>
+                        <div class="flex items-center group">
+                            <div class="w-4 h-4 rounded-full mr-6 group-hover:scale-125 transition-all duration-300" style="background: linear-gradient(135deg, #8B4513, #A0522D); animation: glow 2s infinite; animation-delay: 0.7s;"></div>
+                            <span class="text-lg font-medium text-stone-800 group-hover:text-stone-900 transition-colors">Global Community</span>
+                        </div>
+                        <div class="flex items-center group">
+                            <div class="w-4 h-4 rounded-full mr-6 group-hover:scale-125 transition-all duration-300" style="background: linear-gradient(135deg, #8B4513, #A0522D); animation: glow 2s infinite; animation-delay: 1.4s;"></div>
+                            <span class="text-lg font-medium text-stone-800 group-hover:text-stone-900 transition-colors">Expert Curation</span>
+                        </div>
+                    </div>
+                    <a href="{% url 'core:about' %}" 
+                       class="inline-block btn-premium text-white px-10 py-4 rounded-2xl font-semibold text-lg transition-all">
+                        Learn More About Us
+                    </a>
+                </div>
+                <div class="reveal slide-in-right">
+                    <div class="grid grid-cols-2 gap-8">
+                        <div class="card-3d glass bg-white/80 rounded-3xl p-8 shadow-xl border border-stone-200/50 group">
+                            <div class="text-4xl font-bold luxury-gradient mb-3 display-title group-hover:scale-110 transition-transform">1000+</div>
+                            <div class="text-stone-700 font-medium">Unique Items</div>
+                        </div>
+                        
+                        <div class="card-3d glass bg-white/80 rounded-3xl p-8 shadow-xl border border-stone-200/50 -mt-6 group">
+                            <div class="text-4xl font-bold luxury-gradient mb-3 display-title group-hover:scale-110 transition-transform">10+</div>
+                            <div class="text-stone-700 font-medium">Years Experience</div>
+                        </div>
+                        <div class="card-3d glass bg-white/80 rounded-3xl p-8 shadow-xl border border-stone-200/50 mt-6 group">
+                            <div class="text-4xl font-bold luxury-gradient mb-3 display-title group-hover:scale-110 transition-transform">100%</div>
+                            <div class="text-stone-700 font-medium">Authentic</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Enhanced Customer Reviews Section -->
+<section class="py-32 bg-gradient-to-br from-stone-50 to-stone-100 luxury-pattern overflow-hidden">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-20 reveal">
+            <h2 class="display-title text-6xl text-stone-800 mb-8">What Our <span class="luxury-gradient">Customers</span> Say</h2>
+            <div class="animated-divider max-w-lg mx-auto mb-8"></div>
+            <p class="text-xl text-stone-700 max-w-4xl mx-auto leading-relaxed font-light">
+                Discover why collectors worldwide trust Oraagh Swals for their most precious acquisitions.
+            </p>
+        </div>
+        
+        {% if recent_reviews %}
+        <div class="relative max-w-7xl mx-auto">
+            <!-- Enhanced Reviews Slider Container -->
+            <div class="overflow-hidden rounded-3xl">
+                <div id="reviewsSlider" class="flex transition-all duration-700 ease-out">
+                    {% for review in recent_reviews %}
+                    <div class="w-full flex-shrink-0 px-6">
+                        <div class="card-3d glass bg-white/80 rounded-3xl p-12 shadow-2xl mx-auto max-w-5xl border border-stone-200/50 relative overflow-hidden group">
+                            <!-- Decorative Elements -->
+                            <div class="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-stone-200/20 to-stone-300/20 rounded-full blur-2xl"></div>
+                            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-gradient-to-tr from-stone-300/20 to-stone-400/20 rounded-full blur-3xl"></div>
+                            
+                            <!-- Star Rating -->
+                            <div class="flex justify-center mb-8 relative z-10">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= review.rating %}
+                                        <svg class="w-8 h-8 text-amber-400 fill-current mx-1 hover:scale-125 transition-transform" viewBox="0 0 20 20">
+                                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                        </svg>
+                                    {% else %}
+                                        <svg class="w-8 h-8 text-stone-300 fill-current mx-1 hover:scale-125 transition-transform" viewBox="0 0 20 20">
+                                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                        </svg>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Review Content -->
+                            <blockquote class="text-2xl md:text-3xl text-stone-800 text-center mb-10 leading-relaxed font-light italic relative z-10" style="font-family: 'Cormorant Garamond', serif;">
+                                <span class="text-6xl text-stone-300 absolute -top-4 -left-4">"</span>
+                                {{ review.comment }}
+                                <span class="text-6xl text-stone-300 absolute -bottom-8 -right-4">"</span>
+                            </blockquote>
+                            
+                            <!-- Author Info -->
+                            <div class="text-center relative z-10">
+                                <div class="font-bold text-stone-800 text-xl mb-2 display-title">{{ review.author }}</div>
+                                <div class="text-stone-600 font-medium mb-3">{{ review.product.name }}</div>
+                                <div class="text-sm text-stone-500">{{ review.created_at|date:"F Y" }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Enhanced Navigation Buttons -->
+            <button id="prevReview" class="absolute left-6 top-1/2 transform -translate-y-1/2 glass bg-white/80 hover:bg-white rounded-full p-4 shadow-2xl transition-all duration-300 group z-20">
+                <svg class="w-8 h-8 text-stone-600 group-hover:text-stone-800 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            <button id="nextReview" class="absolute right-6 top-1/2 transform -translate-y-1/2 glass bg-white/80 hover:bg-white rounded-full p-4 shadow-2xl transition-all duration-300 group z-20">
+                <svg class="w-8 h-8 text-stone-600 group-hover:text-stone-800 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+            
+            <!-- Enhanced Dots Indicator -->
+            <div class="flex justify-center mt-12 space-x-3">
+                {% for review in recent_reviews %}
+                <button class="review-dot w-4 h-4 rounded-full bg-stone-300 hover:bg-stone-500 transition-all duration-300 relative overflow-hidden" data-slide="{{ forloop.counter0 }}">
+                    <div class="absolute inset-0 bg-gradient-to-r from-stone-600 to-stone-700 rounded-full transform scale-0 transition-transform duration-300"></div>
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center reveal">
+            <div class="glass rounded-3xl p-16 max-w-3xl mx-auto">
+                <p class="text-2xl text-stone-600 font-light">No reviews available yet. Be the first to share your experience!</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+// Simplified Scroll Animations - Fixed
+const observerOptions = {
+    threshold: 0.2,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+// Initialize all reveal elements as visible by default
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.reveal').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+        observer.observe(el);
+    });
+});
+
+// Enhanced Reviews Slider Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const slider = document.getElementById('reviewsSlider');
+    const prevBtn = document.getElementById('prevReview');
+    const nextBtn = document.getElementById('nextReview');
+    const dots = document.querySelectorAll('.review-dot');
+    
+    if (!slider || dots.length === 0) return;
+    
+    let currentSlide = 0;
+    const totalSlides = dots.length;
+    
+    function updateSlider() {
+        slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        dots.forEach((dot, index) => {
+            const innerElement = dot.querySelector('div');
+            if (index === currentSlide) {
+                dot.classList.remove('bg-stone-300');
+                dot.classList.add('bg-stone-600');
+                if (innerElement) {
+                    innerElement.style.transform = 'scale(1)';
+                }
+            } else {
+                dot.classList.remove('bg-stone-600');
+                dot.classList.add('bg-stone-300');
+                if (innerElement) {
+                    innerElement.style.transform = 'scale(0)';
+                }
+            }
+        });
+    }
+    
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateSlider();
+    }
+    
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        updateSlider();
+    }
+    
+    // Event listeners
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentSlide = index;
+            updateSlider();
+        });
+    });
+    
+    // Auto-advance slider with pause on hover
+    let autoSlideInterval = setInterval(nextSlide, 6000);
+    
+    slider.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+    slider.addEventListener('mouseleave', () => {
+        autoSlideInterval = setInterval(nextSlide, 6000);
+    });
+    
+    // Initialize
+    updateSlider();
+});
+
+// Enhanced Categories Slider Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const categorySlider = document.getElementById('categoriesSlider');
+    const prevCategoryBtn = document.getElementById('prevCategory');
+    const nextCategoryBtn = document.getElementById('nextCategory');
+    const categoryDots = document.querySelectorAll('.category-dot');
+    
+    if (!categorySlider || categoryDots.length === 0) return;
+    
+    let currentCategorySlide = 0;
+    const totalCategorySlides = categoryDots.length;
+    const slidesToShow = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 2 : 1;
+    const maxSlides = Math.max(0, totalCategorySlides - slidesToShow);
+    
+    function updateCategorySlider() {
+        const slideWidth = 100 / slidesToShow;
+        categorySlider.style.transform = `translateX(-${currentCategorySlide * slideWidth}%)`;
+        
+        categoryDots.forEach((dot, index) => {
+            const innerElement = dot.querySelector('div');
+            if (index === currentCategorySlide) {
+                dot.classList.remove('bg-stone-300');
+                dot.classList.add('bg-stone-600');
+                if (innerElement) {
+                    innerElement.style.transform = 'scale(1)';
+                }
+            } else {
+                dot.classList.remove('bg-stone-600');
+                dot.classList.add('bg-stone-300');
+                if (innerElement) {
+                    innerElement.style.transform = 'scale(0)';
+                }
+            }
+        });
+    }
+    
+    function nextCategorySlide() {
+        if (currentCategorySlide < maxSlides) {
+            currentCategorySlide++;
+        } else {
+            currentCategorySlide = 0;
+        }
+        updateCategorySlider();
+    }
+    
+    function prevCategorySlide() {
+        if (currentCategorySlide > 0) {
+            currentCategorySlide--;
+        } else {
+            currentCategorySlide = maxSlides;
+        }
+        updateCategorySlider();
+    }
+    
+    // Event listeners
+    if (nextCategoryBtn) nextCategoryBtn.addEventListener('click', nextCategorySlide);
+    if (prevCategoryBtn) prevCategoryBtn.addEventListener('click', prevCategorySlide);
+    
+    categoryDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentCategorySlide = Math.min(index, maxSlides);
+            updateCategorySlider();
+        });
+    });
+    
+    // Auto-advance category slider with pause on hover
+    let categoryAutoSlide = setInterval(nextCategorySlide, 5000);
+    
+    categorySlider.addEventListener('mouseenter', () => clearInterval(categoryAutoSlide));
+    categorySlider.addEventListener('mouseleave', () => {
+        categoryAutoSlide = setInterval(nextCategorySlide, 5000);
+    });
+    
+    // Initialize
+    updateCategorySlider();
+    
+    // Enhanced responsive handling
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            const newSlidesToShow = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 2 : 1;
+            if (newSlidesToShow !== slidesToShow) {
+                location.reload();
+            }
+        }, 250);
+    });
+});
+
+// Add smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Performance optimization: Lazy load background images
+const observeImages = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            if (img.dataset.bg) {
+                img.style.backgroundImage = `url(${img.dataset.bg})`;
+                observeImages.unobserve(img);
+            }
+        }
+    });
+});
+
+document.querySelectorAll('[data-bg]').forEach(img => {
+    observeImages.observe(img);
+});
+
+// Enhanced Parallax Effects
+function initParallax() {
+    const parallaxElements = document.querySelectorAll('.parallax-element');
+    
+    function updateParallax() {
+        const scrolled = window.pageYOffset;
+        
+        parallaxElements.forEach(element => {
+            const speed = element.dataset.speed || 0.5;
+            const yPos = -(scrolled * speed);
+            element.style.transform = `translateY(${yPos}px)`;
+        });
+    }
+    
+    // Throttled scroll event for better performance
+    let ticking = false;
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    }
+    
+    window.addEventListener('scroll', () => {
+        ticking = false;
+        requestTick();
+    });
+}
+
+// Initialize parallax on page load
+document.addEventListener('DOMContentLoaded', initParallax);
+
+// Enhanced text animations with intersection observer
+const textAnimationObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const element = entry.target;
+            
+            // Add staggered animation to child elements
+            const children = element.querySelectorAll('.animate-child');
+            children.forEach((child, index) => {
+                setTimeout(() => {
+                    child.style.animation = 'fadeInScale 0.8s ease-out forwards';
+                }, index * 200);
+            });
+            
+            textAnimationObserver.unobserve(element);
+        }
+    });
+}, { threshold: 0.3 });
+
+// Observe elements for text animations
+document.querySelectorAll('.text-animate-container').forEach(el => {
+    textAnimationObserver.observe(el);
+});
+
+// Featured Products Slider Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const featuredSlider = document.querySelector('.featured-products-slider');
+    if (!featuredSlider) return;
+    
+    const sliderContainer = featuredSlider.querySelector('.slider-container');
+    const sliderItems = featuredSlider.querySelectorAll('.slider-item');
+    const prevBtn = featuredSlider.querySelector('.slider-prev');
+    const nextBtn = featuredSlider.querySelector('.slider-next');
+    const dotsContainer = featuredSlider.querySelector('.slider-dots');
+    
+    let currentSlide = 0;
+    let slidesToShow = getSlidesToShow();
+    let totalSlides = sliderItems.length;
+    let maxSlide = Math.max(0, totalSlides - slidesToShow);
+    
+    function getSlidesToShow() {
+        if (window.innerWidth >= 1281) return 4;
+        if (window.innerWidth >= 1025) return 3;
+        if (window.innerWidth >= 641) return 2;
+        return 1;
+    }
+    
+    function createDots() {
+        if (!dotsContainer) return;
+        dotsContainer.innerHTML = '';
+        const dotsCount = Math.ceil(totalSlides / slidesToShow);
+        
+        for (let i = 0; i < dotsCount; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'slider-dot';
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i * slidesToShow));
+            dotsContainer.appendChild(dot);
+        }
+    }
+    
+    function updateSlider() {
+        if (!sliderContainer) return;
+        
+        const slideWidth = 100 / slidesToShow;
+        const translateX = -(currentSlide * slideWidth);
+        sliderContainer.style.transform = `translateX(${translateX}%)`;
+        
+        // Update navigation buttons
+        if (prevBtn) prevBtn.style.display = maxSlide > 0 ? 'block' : 'none';
+        if (nextBtn) nextBtn.style.display = maxSlide > 0 ? 'block' : 'none';
+        
+        // Update dots
+        const dots = dotsContainer?.querySelectorAll('.slider-dot');
+        if (dots) {
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === Math.floor(currentSlide / slidesToShow));
+            });
+        }
+    }
+    
+    function goToSlide(slideIndex) {
+        currentSlide = Math.max(0, Math.min(slideIndex, maxSlide));
+        updateSlider();
+    }
+    
+    function nextSlide() {
+        if (currentSlide < maxSlide) {
+            currentSlide++;
+        } else {
+            currentSlide = 0;
+        }
+        updateSlider();
+    }
+    
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+        } else {
+            currentSlide = maxSlide;
+        }
+        updateSlider();
+    }
+    
+    // Event listeners
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    
+    // Touch/swipe support
+    let startX = 0;
+    let isDragging = false;
+    
+    sliderContainer?.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+    });
+    
+    sliderContainer?.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+    });
+    
+    sliderContainer?.addEventListener('touchend', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        }
+    });
+    
+    // Auto-advance slider (optional)
+    let autoSlideInterval = setInterval(nextSlide, 6000);
+    
+    featuredSlider.addEventListener('mouseenter', () => {
+        clearInterval(autoSlideInterval);
+    });
+    
+    featuredSlider.addEventListener('mouseleave', () => {
+        autoSlideInterval = setInterval(nextSlide, 6000);
+    });
+    
+    // Responsive handling
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            const newSlidesToShow = getSlidesToShow();
+            if (newSlidesToShow !== slidesToShow) {
+                slidesToShow = newSlidesToShow;
+                maxSlide = Math.max(0, totalSlides - slidesToShow);
+                currentSlide = Math.min(currentSlide, maxSlide);
+                createDots();
+                updateSlider();
+            }
+        }, 250);
+    });
+    
+    // Initialize
+    createDots();
+    updateSlider();
+});
+
+// Removed complex card animations to prevent glitching
+</script>
+
+{% endblock %}

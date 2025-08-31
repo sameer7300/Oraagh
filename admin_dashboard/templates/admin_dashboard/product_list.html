@@ -1,0 +1,198 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block page_title %}Product Management{% endblock %}
+{% block page_description %}Oversee your entire product inventory{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<div class="mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center">
+            <div class="bg-blue-100 text-blue-600 rounded-full h-12 w-12 flex items-center justify-center">
+                <i class="fas fa-boxes"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm text-gray-500">Total Products</p>
+                <p class="text-2xl font-bold text-gray-800">{{ products.paginator.count }}</p>
+            </div>
+        </div>
+        <!-- Add more stats cards here if needed -->
+    </div>
+</div>
+
+<!-- Controls and Search -->
+<div class="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
+    <form method="GET" action="{% url 'admin_dashboard:product_list' %}" class="w-full md:w-auto flex-grow">
+        <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                <i class="fas fa-search text-gray-400"></i>
+            </span>
+            <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Search by name, category, etc..."
+                   class="w-full pl-10 pr-4 py-2.5 border border-gray-300 bg-white rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition">
+        </div>
+    </form>
+    <div class="flex items-center gap-2 w-full md:w-auto">
+        <div class="flex items-center bg-gray-200 rounded-lg p-1">
+            <button id="view-grid-btn" class="p-2 rounded-md text-gray-700"><i class="fas fa-th-large"></i></button>
+            <button id="view-list-btn" class="p-2 rounded-md text-gray-500"><i class="fas fa-list"></i></button>
+        </div>
+        <a href="{% url 'admin_dashboard:product_add' %}" class="btn-primary text-white font-bold py-2.5 px-5 rounded-lg flex items-center justify-center gap-2 w-full md:w-auto">
+            <i class="fas fa-plus"></i>
+            <span>Add Product</span>
+        </a>
+    </div>
+</div>
+
+{% if products %}
+<!-- Grid View -->
+<div id="product-grid-view" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    {% for product in products %}
+    <div class="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:shadow-lg hover:border-red-300 transform hover:-translate-y-1">
+        <a href="{% url 'admin_dashboard:product_edit' product.pk %}" class="block h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
+            {% if product.media.first %}
+                <img src="{{ product.media.first.media_file.url }}" alt="{{ product.name }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+            {% else %}
+                <i class="fas fa-image fa-3x text-gray-400"></i>
+            {% endif %}
+        </a>
+        <div class="p-4 flex-grow flex flex-col">
+            <h3 class="text-lg font-bold text-gray-800 truncate"><a href="{% url 'admin_dashboard:product_edit' product.pk %}">{{ product.name }}</a></h3>
+            <p class="text-sm text-gray-500 mb-3">{{ product.category.name|default:'Uncategorized' }}</p>
+            <div class="flex justify-between items-center text-lg mt-auto pt-2 font-bold">
+                <span class="text-green-600">PKR {{ product.price|floatformat:2 }}</span>
+                <span class="text-sm font-medium px-2 py-1 rounded-full 
+                    {% if product.stock_quantity <= 0 %}bg-red-100 text-red-800
+                    {% elif product.stock_quantity < 10 %}bg-yellow-100 text-yellow-800
+                    {% else %}bg-green-100 text-green-800{% endif %}">
+                    {{ product.stock_quantity }} in stock
+                </span>
+            </div>
+        </div>
+        <div class="p-3 bg-gray-50 border-t border-gray-200 flex justify-end gap-3">
+            <a href="{% url 'admin_dashboard:product_edit' product.pk %}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm transition-colors"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
+            <a href="{% url 'admin_dashboard:product_delete' product.pk %}" class="text-red-600 hover:text-red-800 font-semibold text-sm transition-colors"><i class="fas fa-trash-alt mr-1"></i>Delete</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Table View -->
+<div id="product-list-view" class="hidden bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Name</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                <th scope="col" class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            {% for product in products %}
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
+                    {% if product.media.first %}
+                        <img src="{{ product.media.first.media_file.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+                    {% else %}
+                        <i class="fas fa-image text-gray-400"></i>
+                    {% endif %}
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ product.category.name|default:'N/A' }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">PKR {{ product.price|floatformat:2 }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                        {% if product.stock_quantity <= 0 %}bg-red-100 text-red-800
+                        {% elif product.stock_quantity < 10 %}bg-yellow-100 text-yellow-800
+                        {% else %}bg-green-100 text-green-800{% endif %}">
+                        {{ product.stock_quantity }} units
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <a href="{% url 'admin_dashboard:product_edit' product.pk %}" class="text-blue-600 hover:text-blue-900">Edit</a>
+                    <a href="{% url 'admin_dashboard:product_delete' product.pk %}" class="text-red-600 hover:text-red-900 ml-4">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination -->
+{% if products.has_other_pages %}
+<div class="mt-8 flex justify-center">
+    <nav class="flex items-center -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+        {% if products.has_previous %}
+            <a href="?page=1{% if query %}&q={{ query }}{% endif %}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"><i class="fas fa-angle-double-left"></i></a>
+            <a href="?page={{ products.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"><i class="fas fa-angle-left"></i></a>
+        {% endif %}
+        <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-red-600 text-white text-sm font-medium">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+        {% if products.has_next %}
+            <a href="?page={{ products.next_page_number }}{% if query %}&q={{ query }}{% endif %}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"><i class="fas fa-angle-right"></i></a>
+            <a href="?page={{ products.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"><i class="fas fa-angle-double-right"></i></a>
+        {% endif %}
+    </nav>
+</div>
+{% endif %}
+
+{% else %}
+<!-- Empty State -->
+<div class="col-span-full bg-white border-2 border-dashed border-gray-300 rounded-xl p-12 text-center">
+    <i class="fas fa-box-open fa-4x text-gray-400 mb-4"></i>
+    <h3 class="text-xl font-semibold text-gray-800">No Products Found</h3>
+    <p class="text-gray-500 mt-2">Get started by adding your first product to the inventory.</p>
+    <a href="{% url 'admin_dashboard:product_add' %}" class="mt-6 inline-block btn-primary text-white font-bold py-2.5 px-6 rounded-lg">
+        Add First Product
+    </a>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const gridView = document.getElementById('product-grid-view');
+    const listView = document.getElementById('product-list-view');
+    const gridBtn = document.getElementById('view-grid-btn');
+    const listBtn = document.getElementById('view-list-btn');
+
+    function setView(view) {
+        if (view === 'list') {
+            listView.classList.remove('hidden');
+            gridView.classList.add('hidden');
+            listBtn.classList.add('bg-white', 'text-gray-700');
+            listBtn.classList.remove('text-gray-500');
+            gridBtn.classList.remove('bg-white', 'text-gray-700');
+            gridBtn.classList.add('text-gray-500');
+            localStorage.setItem('product_view', 'list');
+        } else {
+            gridView.classList.remove('hidden');
+            listView.classList.add('hidden');
+            gridBtn.classList.add('bg-white', 'text-gray-700');
+            gridBtn.classList.remove('text-gray-500');
+            listBtn.classList.remove('bg-white', 'text-gray-700');
+            listBtn.classList.add('text-gray-500');
+            localStorage.setItem('product_view', 'grid');
+        }
+    }
+
+    gridBtn.addEventListener('click', () => setView('grid'));
+    listBtn.addEventListener('click', () => setView('list'));
+
+    // Restore last view from local storage
+    const savedView = localStorage.getItem('product_view');
+    if (savedView) {
+        setView(savedView);
+    } else {
+        setView('grid'); // Default view
+    }
+});
+</script>
+{% endblock %}

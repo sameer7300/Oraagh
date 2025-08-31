@@ -1,0 +1,342 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Blog - Red Sun Mining{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Oraagh Brand Color Palette */
+    :root {
+        --primary-brown: #8B4513;
+        --primary-brown-dark: #654321;
+        --neutral-brown-light: #A0522D;
+        --accent-cream: #F5F5DC;
+        --cream-100: #FEFEFE;
+        --warm-beige: #F4E4BC;
+    }
+    
+    /* Oraagh Typography */
+    .oraagh-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: var(--primary-brown-dark);
+        text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.1);
+    }
+    
+    .oraagh-subtitle {
+        font-family: 'Playfair Display', serif;
+        font-weight: 600;
+        color: var(--primary-brown);
+    }
+    
+    .oraagh-text {
+        font-family: 'Inter', sans-serif;
+        color: var(--neutral-brown-light);
+    }
+    
+    .oraagh-accent {
+        color: var(--primary-brown);
+        font-weight: 600;
+    }
+    
+    /* Glassmorphism Effects */
+    .card-glass {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(139, 69, 19, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .card-glass:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(139, 69, 19, 0.15);
+        border-color: rgba(139, 69, 19, 0.2);
+    }
+    
+    /* Hero Section - Force override any conflicting styles */
+    .blog-hero {
+        background: linear-gradient(135deg, #654321 0%, #8B4513 25%, #A0522D 50%, #F5F5DC 75%, #FEFEFE 100%) !important;
+        position: relative !important;
+        overflow: hidden !important;
+        min-height: 200px !important;
+    }
+    
+    .blog-hero::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 70% 80%, rgba(139,69,19,0.1) 0%, transparent 50%) !important;
+        animation: float 20s ease-in-out infinite !important;
+        pointer-events: none !important;
+        z-index: 1 !important;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    /* Button Styling */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, var(--primary-brown-dark) 100%);
+        color: white;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s;
+    }
+    
+    .btn-primary:hover::before {
+        left: 100%;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
+    }
+    
+    /* Category Tags */
+    .category-tag {
+        background: linear-gradient(135deg, var(--accent-cream) 0%, var(--warm-beige) 100%);
+        color: var(--primary-brown-dark);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(139, 69, 19, 0.1);
+    }
+    
+    .category-tag:hover {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, var(--primary-brown-dark) 100%);
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
+    }
+    
+    /* Pagination */
+    .pagination-btn {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(139, 69, 19, 0.2);
+        color: var(--primary-brown-dark);
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .pagination-btn:hover {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, var(--primary-brown-dark) 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(139, 69, 19, 0.2);
+    }
+    
+    /* Animations */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    
+    .fade-in.animate {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        .card-glass {
+            margin: 0 -1rem;
+            border-radius: 16px;
+        }
+        
+        .hero-gradient {
+            padding: 3rem 1rem;
+        }
+        
+        .oraagh-title {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Compact Hero Section -->
+<div class="text-white py-16 px-4 text-center shadow-xl relative" style="background: linear-gradient(135deg, #654321 0%, #8B4513 25%, #A0522D 50%, #F5F5DC 75%, #FEFEFE 100%) !important;">
+    <div class="absolute inset-0" style="background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(139,69,19,0.1) 0%, transparent 50%); animation: float 20s ease-in-out infinite;"></div>
+    <div class="relative z-10">
+        <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-4 text-white drop-shadow-lg">
+            Mining Insights
+        </h1>
+        <p class="mt-4 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed text-white/90">
+            Discover the latest trends, insights, and stories from the world of mining
+        </p>
+        <div class="mt-6 flex justify-center">
+            <div class="w-16 h-1 bg-gradient-to-r from-transparent via-white to-transparent opacity-60"></div>
+        </div>
+    </div>
+</div>
+
+<div class="min-h-screen" style="background: linear-gradient(135deg, #FEFEFE 0%, #F5F5DC 50%, #F4E4BC 100%);">
+    <div class="container mx-auto px-4 py-16">
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {% for post in posts %}
+            <article class="card-glass p-8 fade-in" data-animate data-delay="{{ forloop.counter0|add:200 }}">
+                {% if post.featured_image %}
+                    <div class="relative overflow-hidden rounded-xl mb-6 group">
+                        <a href="{{ post.get_absolute_url }}">
+                            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </a>
+                    </div>
+                {% endif %}
+                
+                <div class="space-y-4">
+                    <!-- Category Tags -->
+                    <div class="flex flex-wrap gap-2">
+                        {% for category in post.categories.all %}
+                            <a href="#" class="category-tag">{{ category.name }}</a>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Post Title -->
+                    <h2 class="oraagh-subtitle text-2xl mb-3">
+                        <a href="{{ post.get_absolute_url }}" class="hover:text-primary-brown-dark transition-colors">{{ post.title }}</a>
+                    </h2>
+                    
+                    <!-- Author and Date -->
+                    <div class="flex items-center text-sm oraagh-text opacity-70">
+                        <i class="fas fa-user mr-2"></i>
+                        <span class="mr-4">{{ post.author.get_full_name|default:post.author.username }}</span>
+                        <i class="fas fa-calendar mr-2"></i>
+                        <span>{{ post.created_at|date:"F d, Y" }}</span>
+                    </div>
+                    
+                    <!-- Post Excerpt -->
+                    <div class="oraagh-text leading-relaxed">
+                        {{ post.content|safe|truncatewords_html:30 }}
+                    </div>
+                    
+                    <!-- Read More Button -->
+                    <div class="pt-4">
+                        <a href="{{ post.get_absolute_url }}" class="btn-primary inline-flex items-center px-6 py-3 text-sm font-semibold">
+                            <span class="relative z-10">Read Full Article</span>
+                            <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform relative z-10"></i>
+                        </a>
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <div class="col-span-full text-center py-20">
+                <div class="card-glass p-12 max-w-md mx-auto">
+                    <i class="fas fa-newspaper text-6xl oraagh-accent mb-6"></i>
+                    <h3 class="oraagh-subtitle text-2xl mb-4">No Posts Yet</h3>
+                    <p class="oraagh-text">No blog posts have been published yet. Check back soon for the latest mining insights!</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+        <div class="mt-16 flex justify-center items-center space-x-6 fade-in" data-animate data-delay="600">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="pagination-btn inline-flex items-center">
+                    <i class="fas fa-chevron-left mr-2"></i>
+                    Previous
+                </a>
+            {% endif %}
+
+            <div class="card-glass px-6 py-3 rounded-xl">
+                <span class="oraagh-accent font-semibold">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+            </div>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="pagination-btn inline-flex items-center">
+                    Next
+                    <i class="fas fa-chevron-right ml-2"></i>
+                </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Scroll-triggered animations using Intersection Observer
+    document.addEventListener('DOMContentLoaded', function() {
+        // Create intersection observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const element = entry.target;
+                    const delay = element.getAttribute('data-delay') || 0;
+                    
+                    setTimeout(() => {
+                        element.classList.add('animate');
+                    }, parseInt(delay));
+                    
+                    // Stop observing once animated
+                    observer.unobserve(element);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements with data-animate attribute
+        const animateElements = document.querySelectorAll('[data-animate]');
+        animateElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Enhanced image hover effects
+        const imageContainers = document.querySelectorAll('.group');
+        imageContainers.forEach(container => {
+            container.addEventListener('mouseenter', function() {
+                const img = this.querySelector('img');
+                if (img) {
+                    img.style.filter = 'brightness(1.1) contrast(1.1)';
+                }
+            });
+            
+            container.addEventListener('mouseleave', function() {
+                const img = this.querySelector('img');
+                if (img) {
+                    img.style.filter = 'brightness(1) contrast(1)';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

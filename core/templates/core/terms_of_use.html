@@ -1,0 +1,42 @@
+{% extends 'core/policy_base.html' %}
+
+{% block policy_title %}Terms of Use{% endblock %}
+
+{% block policy_subtitle %}
+    The legal terms and conditions governing your use of our website and services.
+{% endblock %}
+
+{% block policy_nav %}
+    <li class="policy-nav-item"><a href="#introduction" class="text-gray-600 dark:text-gray-300 hover:text-red-500">Introduction</a></li>
+    <li class="policy-nav-item"><a href="#user-responsibilities" class="text-gray-600 dark:text-gray-300 hover:text-red-500">User Responsibilities</a></li>
+    <li class="policy-nav-item"><a href="#intellectual-property" class="text-gray-600 dark:text-gray-300 hover:text-red-500">Intellectual Property</a></li>
+    <li class="policy-nav-item"><a href="#limitation-of-liability" class="text-gray-600 dark:text-gray-300 hover:text-red-500">Limitation of Liability</a></li>
+    <li class="policy-nav-item"><a href="#contact" class="text-gray-600 dark:text-gray-300 hover:text-red-500">Contact Us</a></li>
+{% endblock %}
+
+{% block policy_content %}
+    <section id="introduction" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">1. Introduction</h2>
+        <p>Welcome to Oraagh. By accessing and using our website, you agree to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern Timeless Cart's relationship with you in relation to this website.</p>
+    </section>
+
+    <section id="user-responsibilities" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">2. User Responsibilities</h2>
+        <p>You are responsible for ensuring that all information you provide on our website is accurate and up-to-date. You agree not to use this website for any unlawful purpose or in a way that could harm the website or its users.</p>
+    </section>
+
+    <section id="intellectual-property" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">3. Intellectual Property</h2>
+        <p>All content on this website, including text, graphics, logos, and images, is the property of Oraagh or its content suppliers and is protected by international copyright laws. Unauthorized use of any content may violate copyright, trademark, and other laws.</p>
+    </section>
+
+    <section id="limitation-of-liability" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">4. Limitation of Liability</h2>
+        <p>Oraagh will not be liable for any direct, indirect, incidental, special, or consequential damages that result from the use of, or the inability to use, this website or the information and materials on this site, even if Oraagh has been advised of the possibility of such damages.</p>
+    </section>
+
+    <section id="contact" class="p-6 bg-white dark:bg-gray-800 rounded-lg policy-section shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">5. Contact Us</h2>
+        <p>If you have any questions about these Terms of Use, please contact us at <a href="mailto:info@oraagh.com" class="text-red-500 hover:underline">info@oraagh.com</a>.</p>
+    </section>
+{% endblock %}

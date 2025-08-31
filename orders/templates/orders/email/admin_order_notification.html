@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Order - {{ order.order_number }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .email-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #8B4513, #654321);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .header .order-number {
+            font-size: 18px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .alert-badge {
+            background-color: #D4AF37;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        /* Content */
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            border-left: 4px solid #D4AF37;
+            padding-left: 20px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #D4AF37;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .info-grid {
+            background-color: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #4a5568;
+            min-width: 120px;
+        }
+        
+        .info-value {
+            color: #2d3748;
+            flex: 1;
+            text-align: right;
+        }
+        
+        /* Customer highlight */
+        .customer-section {
+            background: linear-gradient(135deg, #ebf8ff, #bee3f8);
+            border: 1px solid #90cdf4;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .customer-section .section-title {
+            color: #2b6cb0;
+            border-left: none;
+            padding-left: 0;
+        }
+        
+        /* Order items */
+        .order-item {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .item-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2d3748;
+            flex: 1;
+        }
+        
+        .item-price {
+            font-weight: bold;
+            color: #D4AF37;
+            font-size: 16px;
+            margin-left: 15px;
+        }
+        
+        .item-details {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        /* Order summary */
+        .order-summary {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+        
+        .summary-total {
+            border-top: 2px solid #D4AF37;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #D4AF37;
+        }
+        
+        /* Action items */
+        .action-items {
+            background-color: #fef5e7;
+            border: 1px solid #f6ad55;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .action-items h3 {
+            color: #c05621;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .action-items ol {
+            padding-left: 20px;
+            color: #744210;
+        }
+        
+        .action-items li {
+            margin-bottom: 8px;
+        }
+        
+        /* Admin link */
+        .admin-link {
+            background: linear-gradient(135deg, #D4AF37, #8B4513);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .admin-link a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .admin-link a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #2d3748;
+            color: #a0aec0;
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 14px;
+        }
+        
+        .footer .brand {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        /* Status badges */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .status-pending {
+            background-color: #fef5e7;
+            color: #c05621;
+        }
+        
+        .status-processing {
+            background-color: #ebf8ff;
+            color: #2b6cb0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                box-shadow: none;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .info-row {
+                flex-direction: column;
+            }
+            
+            .info-value {
+                text-align: left;
+                margin-top: 5px;
+            }
+            
+            .item-header {
+                flex-direction: column;
+            }
+            
+            .item-price {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="alert-badge">🚨 NEW ORDER</div>
+            <h1>Order Received</h1>
+            <p>Action required in admin panel</p>
+            <div class="order-number">{{ order.order_number }}</div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <p style="margin-bottom: 25px; color: #4a5568; font-size: 16px;">
+                A new order has been placed on <strong>Oraagh</strong> and requires your attention.
+            </p>
+            
+            <!-- Order Details -->
+            <div class="section">
+                <div class="section-title">Order Information</div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <span class="info-label">Order Date:</span>
+                        <span class="info-value">{{ order.created_at|date:"F d, Y at g:i A" }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value">
+                            <span class="status-badge status-pending">{{ order.get_status_display }}</span>
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Payment Method:</span>
+                        <span class="info-value">{{ order.payment_method }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Customer Information -->
+            <div class="customer-section">
+                <div class="section-title">👤 Customer Information</div>
+                <div class="info-grid" style="background-color: rgba(255,255,255,0.7);">
+                    <div class="info-row">
+                        <span class="info-label">Name:</span>
+                        <span class="info-value">{{ user.get_full_name }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value">{{ user.email }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Username:</span>
+                        <span class="info-value">{{ user.username }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Billing Address -->
+            <div class="section">
+                <div class="section-title">💳 Billing Address</div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <span class="info-label">Name:</span>
+                        <span class="info-value">{{ order.billing_name }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value">{{ order.billing_email }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Phone:</span>
+                        <span class="info-value">{{ order.billing_phone }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Address:</span>
+                        <span class="info-value">
+                            {{ order.billing_address }}<br>
+                            {{ order.billing_city }}, {{ order.billing_state }} {{ order.billing_zip }}<br>
+                            {{ order.billing_country }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Shipping Address -->
+            <div class="section">
+                <div class="section-title">📦 Shipping Address</div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <span class="info-label">Name:</span>
+                        <span class="info-value">{{ order.shipping_name }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Address:</span>
+                        <span class="info-value">
+                            {{ order.shipping_address }}<br>
+                            {{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_zip }}<br>
+                            {{ order.shipping_country }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Order Items -->
+            <div class="section">
+                <div class="section-title">🛍️ Order Items</div>
+                {% for item in order.items.all %}
+                <div class="order-item">
+                    <div class="item-header">
+                        <div class="item-name">{{ item.product.name }}</div>
+                        <div class="item-price">PKR {{ item.get_total }}</div>
+                    </div>
+                    <div class="item-details">
+                        {% if item.product.sku %}SKU: {{ item.product.sku }} | {% endif %}
+                        Quantity: {{ item.quantity }} | 
+                        Unit Price: PKR {{ item.product.price }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Order Summary -->
+            <div class="section">
+                <div class="section-title">💰 Order Summary</div>
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span>PKR {{ order.subtotal }}</span>
+                    </div>
+                    {% if order.tax %}
+                    <div class="summary-row">
+                        <span>Tax:</span>
+                        <span>PKR {{ order.tax }}</span>
+                    </div>
+                    {% endif %}
+                    {% if order.shipping_cost %}
+                    <div class="summary-row">
+                        <span>Shipping:</span>
+                        <span>PKR {{ order.shipping_cost }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="summary-row summary-total">
+                        <span>Total Amount:</span>
+                        <span>PKR {{ order.total }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            {% if order.customer_notes %}
+            <!-- Customer Notes -->
+            <div class="section">
+                <div class="section-title">📝 Customer Notes</div>
+                <div class="info-grid">
+                    <p style="color: #4a5568; font-style: italic; background-color: #fffaf0; padding: 15px; border-radius: 6px; border-left: 4px solid #f6ad55;">
+                        "{{ order.customer_notes }}"
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Action Items -->
+            <div class="action-items">
+                <h3>⚡ Next Steps</h3>
+                <ol>
+                    <li>Review order details and verify inventory availability</li>
+                    <li>Process payment and update order status</li>
+                    <li>Prepare items for packaging and shipping</li>
+                    <li>Generate shipping label and tracking number</li>
+                    <li>Send shipping confirmation to customer</li>
+                    <li>Contact customer if any issues arise</li>
+                </ol>
+            </div>
+            
+            <!-- Admin Panel Link -->
+            <div class="admin-link">
+                <a href="{{ request.scheme }}://{{ request.get_host }}/admin/orders/order/{{ order.id }}/">
+                    🔧 View Order in Admin Panel →
+                </a>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="brand">Oraagh Admin</div>
+            <p>Order management system notification</p>
+            <p style="margin-top: 15px; font-size: 12px;">
+                This is an automated admin notification. Do not reply to this email.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

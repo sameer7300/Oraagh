@@ -1,0 +1,204 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Verify Reset Code - Unique and Antique{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full">
+        <!-- Logo Section -->
+        <div class="text-center mb-8">
+            <div class="mx-auto w-20 h-20 bg-gradient-to-br from-red-600 to-red-700 rounded-full flex items-center justify-center shadow-lg mb-4">
+                <i class="fas fa-shield-alt text-white text-2xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
+                Verify Code
+            </h1>
+            <p class="mt-2 text-gray-600">
+                Enter the 6-digit code sent to {{ user.email }}
+            </p>
+        </div>
+
+        <!-- Verification Form -->
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="{% if message.tags == 'error' %}bg-red-50 border-l-4 border-red-400{% else %}bg-green-50 border-l-4 border-green-400{% endif %} p-4 rounded-md">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="{% if message.tags == 'error' %}fas fa-exclamation-circle text-red-400{% else %}fas fa-check-circle text-green-400{% endif %}"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm {% if message.tags == 'error' %}text-red-700{% else %}text-green-700{% endif %} font-medium">{{ message }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                <!-- Code Input -->
+                <div class="space-y-2">
+                    <label for="code" class="block text-sm font-semibold text-gray-700 text-center">
+                        <i class="fas fa-key mr-2 text-gray-400"></i>Verification Code
+                    </label>
+                    <div class="flex justify-center">
+                        <input id="code" name="code" type="text" required maxlength="6" 
+                               class="text-center text-2xl font-mono tracking-widest w-48 px-4 py-4 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 hover:border-gray-400" 
+                               placeholder="000000"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6)">
+                    </div>
+                    <p class="text-xs text-gray-500 text-center mt-2">
+                        Code expires in 15 minutes
+                    </p>
+                </div>
+
+                <!-- Timer Display -->
+                <div class="text-center">
+                    <div id="timer" class="text-sm text-gray-600 bg-gray-50 rounded-lg py-2 px-4 inline-block">
+                        <i class="fas fa-clock mr-1"></i>
+                        <span id="timer-text">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit" 
+                            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
+                        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                            <i class="fas fa-check text-red-300 group-hover:text-red-200 transition-colors"></i>
+                        </span>
+                        <span class="ml-3">Verify Code</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Resend Code Section -->
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600 mb-3">Didn't receive the code?</p>
+                <button id="resend-btn" onclick="resendCode()" 
+                        class="text-red-600 hover:text-red-500 font-medium text-sm transition-colors disabled:text-gray-400 disabled:cursor-not-allowed">
+                    <i class="fas fa-redo mr-1"></i>
+                    <span id="resend-text">Resend Code</span>
+                </button>
+                <div id="resend-message" class="mt-2 text-sm hidden"></div>
+            </div>
+
+            <!-- Divider -->
+            <div class="mt-8">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-4 bg-white text-gray-500">Need to start over?</span>
+                    </div>
+                </div>
+                
+                <!-- Back to Forgot Password Link -->
+                <div class="mt-6">
+                    <a href="{% url 'accounts:forgot_password' %}" 
+                       class="w-full flex justify-center py-3 px-4 border border-red-300 rounded-lg text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 hover:border-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200 hover:scale-105 active:scale-95">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Request New Code
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-focus on code input
+document.getElementById('code').focus();
+
+// Timer functionality
+let timeLeft = 15 * 60; // 15 minutes in seconds
+const timerElement = document.getElementById('timer-text');
+
+function updateTimer() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')} remaining`;
+    
+    if (timeLeft <= 0) {
+        timerElement.textContent = 'Code expired';
+        document.getElementById('timer').classList.add('text-red-600', 'bg-red-50');
+        return;
+    }
+    
+    if (timeLeft <= 60) {
+        document.getElementById('timer').classList.add('text-red-600', 'bg-red-50');
+    }
+    
+    timeLeft--;
+}
+
+// Update timer every second
+updateTimer();
+setInterval(updateTimer, 1000);
+
+// Resend code functionality
+let resendCooldown = 0;
+
+function resendCode() {
+    if (resendCooldown > 0) return;
+    
+    const resendBtn = document.getElementById('resend-btn');
+    const resendText = document.getElementById('resend-text');
+    const resendMessage = document.getElementById('resend-message');
+    
+    resendBtn.disabled = true;
+    resendText.textContent = 'Sending...';
+    
+    fetch('{% url "accounts:resend_reset_code" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        resendMessage.classList.remove('hidden');
+        
+        if (data.success) {
+            resendMessage.className = 'mt-2 text-sm text-green-600';
+            resendMessage.textContent = data.message;
+            
+            // Reset timer
+            timeLeft = 15 * 60;
+            document.getElementById('timer').classList.remove('text-red-600', 'bg-red-50');
+            
+            // Start cooldown
+            resendCooldown = 60;
+            const cooldownInterval = setInterval(() => {
+                resendCooldown--;
+                resendText.textContent = `Resend Code (${resendCooldown}s)`;
+                
+                if (resendCooldown <= 0) {
+                    clearInterval(cooldownInterval);
+                    resendBtn.disabled = false;
+                    resendText.textContent = 'Resend Code';
+                }
+            }, 1000);
+            
+        } else {
+            resendMessage.className = 'mt-2 text-sm text-red-600';
+            resendMessage.textContent = data.message;
+            resendBtn.disabled = false;
+            resendText.textContent = 'Resend Code';
+        }
+    })
+    .catch(error => {
+        resendMessage.classList.remove('hidden');
+        resendMessage.className = 'mt-2 text-sm text-red-600';
+        resendMessage.textContent = 'Failed to resend code. Please try again.';
+        resendBtn.disabled = false;
+        resendText.textContent = 'Resend Code';
+    });
+}
+</script>
+{% endblock %}

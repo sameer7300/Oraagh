@@ -1,0 +1,567 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}About Oraagh - Where Every Thread Tells Your Story{% endblock %}
+
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary-brown: #8B4513;
+        --primary-brown-dark: #654321;
+        --neutral-brown-light: #A0522D;
+        --accent-cream: #F5F5DC;
+        --cream-100: #FEFEFE;
+        --warm-beige: #F4E4BC;
+        --gold: #C9A44C;
+        --gold-light: #D4AF37;
+    }
+    
+    .oraagh-hero {
+        background: linear-gradient(135deg, 
+            rgba(139, 69, 19, 0.95) 0%, 
+            rgba(101, 67, 33, 0.98) 30%,
+            rgba(139, 69, 19, 0.95) 70%,
+            rgba(160, 82, 45, 0.9) 100%),
+            url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="weave" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M0,10 Q5,0 10,10 T20,10" stroke="%23F5F5DC" stroke-width="0.5" fill="none" opacity="0.1"/><path d="M10,0 Q15,10 20,0" stroke="%23F5F5DC" stroke-width="0.5" fill="none" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23weave)"/></svg>');
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .floating-elements {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+    }
+    
+    .floating-thread {
+        position: absolute;
+        width: 2px;
+        background: linear-gradient(to bottom, transparent, rgba(245, 245, 220, 0.3), transparent);
+        animation: floatThread 8s ease-in-out infinite;
+    }
+    
+    @keyframes floatThread {
+        0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+        50% { transform: translateY(-20px) rotate(5deg); opacity: 0.7; }
+    }
+    
+    .brand-story-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(139, 69, 19, 0.1);
+        border-radius: 30px;
+        box-shadow: 0 25px 80px rgba(139, 69, 19, 0.15);
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+    }
+    
+    .brand-story-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 40px 120px rgba(139, 69, 19, 0.25);
+        border-color: rgba(139, 69, 19, 0.2);
+    }
+    
+    .ceo-profile {
+        background: linear-gradient(145deg, 
+            rgba(245, 245, 220, 0.95) 0%, 
+            rgba(255, 255, 255, 0.9) 50%,
+            rgba(244, 228, 188, 0.95) 100%);
+        backdrop-filter: blur(25px);
+        border: 3px solid rgba(139, 69, 19, 0.2);
+        border-radius: 35px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .ceo-profile::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(245, 245, 220, 0.3), transparent);
+        transition: left 1s ease;
+    }
+    
+    .ceo-profile:hover::before {
+        left: 100%;
+    }
+    
+    .heritage-section {
+        background: linear-gradient(135deg, #F5F5DC 0%, #FEFEFE 25%, #F4E4BC 50%, #FEFEFE 75%, #F5F5DC 100%);
+        position: relative;
+    }
+    
+    .heritage-section::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="paisley" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M20,5 Q30,10 25,20 Q20,30 10,25 Q5,15 15,10 Q18,7 20,5" fill="none" stroke="%238B4513" stroke-width="0.5" opacity="0.05"/></pattern></defs><rect width="200" height="200" fill="url(%23paisley)"/></svg>') repeat;
+        opacity: 0.3;
+    }
+    
+    .tagline-text {
+        font-family: 'Dancing Script', cursive;
+        background: linear-gradient(135deg, var(--gold) 0%, var(--primary-brown) 50%, var(--gold-light) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 4px 20px rgba(139, 69, 19, 0.3);
+    }
+    
+    .oraagh-title {
+        font-family: 'Playfair Display', serif;
+        color: var(--primary-brown-dark);
+        text-shadow: 2px 2px 8px rgba(139, 69, 19, 0.2);
+    }
+    
+    .fade-in-up {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .fade-in-up.animate {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .slide-in-left {
+        opacity: 0;
+        transform: translateX(-80px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .slide-in-left.animate {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    .slide-in-right {
+        opacity: 0;
+        transform: translateX(80px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .slide-in-right.animate {
+        opacity: 1;
+        transform: translateX(0);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="oraagh-hero flex items-center justify-center relative">
+    <div class="floating-elements">
+        <div class="floating-thread" style="left: 10%; height: 200px; animation-delay: 0s;"></div>
+        <div class="floating-thread" style="left: 25%; height: 150px; animation-delay: 2s;"></div>
+        <div class="floating-thread" style="right: 20%; height: 180px; animation-delay: 4s;"></div>
+        <div class="floating-thread" style="right: 35%; height: 120px; animation-delay: 6s;"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-6xl md:text-8xl lg:text-9xl font-black mb-8 text-white tracking-tight" 
+                style="font-family: 'Pacifico', cursive; text-shadow: 0 8px 40px rgba(0,0,0,0.8); animation: fadeInScale 2s ease-out;">
+                ORAAGH
+            </h1>
+            <p class="tagline-text text-3xl md:text-5xl lg:text-6xl mb-12 font-bold leading-tight" 
+               style="animation: slideInFromBottom 2s ease-out 0.5s both;">
+                Where Every Thread Tells Your Story
+            </p>
+            <p class="text-xl md:text-2xl mb-16 font-light max-w-4xl mx-auto leading-relaxed text-cream-100" 
+               style="font-family: 'Inter', sans-serif; text-shadow: 0 4px 20px rgba(0,0,0,0.6); animation: fadeInUp 2s ease-out 1s both;">
+                Discover the art of timeless elegance woven into every thread of perfection
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center" style="animation: fadeInUp 2s ease-out 1.5s both;">
+                <a href="{% url 'products:product_list' %}" 
+                   class="group relative bg-white text-brown-800 font-bold py-6 px-12 rounded-full text-xl transition-all duration-500 transform hover:scale-110 overflow-hidden shadow-2xl">
+                    <span class="relative z-10" style="color: var(--primary-brown);">Explore Collection</span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-cream-100 to-warm-beige opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Brand Story Section -->
+<section class="heritage-section py-32 relative">
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <!-- Section Header -->
+            <div class="text-center mb-20 fade-in-up" data-animate>
+                <h2 class="oraagh-title text-5xl md:text-7xl font-black mb-8">
+                    Our Heritage
+                </h2>
+                <div class="w-32 h-2 mx-auto mb-8 rounded-full" style="background: linear-gradient(90deg, var(--gold), var(--primary-brown), var(--gold-light));"></div>
+                <p class="text-2xl md:text-3xl font-light max-w-4xl mx-auto leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                    Where traditions are as old as the mountains, and every thread carries a legacy
+                </p>
+            </div>
+
+            <!-- Main Story Content -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-20">
+                <div class="slide-in-left" data-animate>
+                    <div class="brand-story-card p-12">
+                        <div class="space-y-8">
+                            <div>
+                                <h3 class="oraagh-title text-3xl md:text-4xl font-bold mb-6">
+                                    Born in the Valleys
+                                </h3>
+                                <div class="w-20 h-1 mb-8 rounded-full" style="background: linear-gradient(90deg, var(--primary-brown), var(--gold));"></div>
+                            </div>
+                            
+                            <p class="text-lg leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                                At <em style="color: var(--primary-brown); font-family: 'Playfair Display', serif; font-weight: 600;">Oraagh</em>, every thread carries a legacy, every design whispers a tale, and every creation is a tribute to timeless elegance.
+                            </p>
+                            
+                            <p class="text-lg leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                                Born in the valleys where traditions are as old as the mountains, Oraagh was founded with a simple vision: to preserve the art of handmade craftsmanship while bringing its beauty to the modern world.
+                            </p>
+                            
+                            <p class="text-lg leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                                Our artisans, hailing from regions known for their centuries-old weaving techniques, pour their heart and soul into every shawl, muffler, stole, and purse. Each piece is not just an accessory—it's a canvas of culture, a story of heritage, and a mark of individuality.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slide-in-right" data-animate>
+                    <div class="relative">
+                        <div class="aspect-square rounded-3xl overflow-hidden shadow-2xl">
+                            <img src="{% static 'oraghabout.jpg' %}" 
+                                 alt="Traditional weaving artisan at work" 
+                                 class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                        </div>
+                        <div class="absolute -bottom-6 -right-6 w-32 h-32 rounded-full flex items-center justify-center shadow-2xl" 
+                             style="background: linear-gradient(135deg, var(--gold), var(--primary-brown));">
+                            <i class="fas fa-heart text-white text-3xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Philosophy Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-20">
+                <div class="slide-in-left" data-animate>
+                    <div class="relative">
+                        <div class="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
+                            <img src="{% static 'oraag-main.jpg' %}" alt="Logo"
+                                 alt="Beautiful handwoven shawls and textiles" 
+                                 class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                        </div>
+                        <div class="absolute -top-6 -left-6 w-32 h-32 rounded-full flex items-center justify-center shadow-2xl" 
+                             style="background: linear-gradient(135deg, var(--primary-brown), var(--gold-light));">
+                            <i class="fas fa-gem text-white text-3xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-in-right" data-animate>
+                    <div class="brand-story-card p-12">
+                        <div class="space-y-8">
+                            <div>
+                                <h3 class="oraagh-title text-3xl md:text-4xl font-bold mb-6">
+                                    Our Philosophy
+                                </h3>
+                                <div class="w-20 h-1 mb-8 rounded-full" style="background: linear-gradient(90deg, var(--gold), var(--primary-brown));"></div>
+                            </div>
+                            
+                            <p class="text-lg leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                                We believe fashion is more than appearance; it is memory, meaning, and connection. When you wrap an Oraagh shawl around your shoulders or carry one of our handmade purses, you don't just wear an item—you embrace generations of artistry, patience, and perfection.
+                            </p>
+                            
+                            <p class="text-lg leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                                Our collections are carefully curated to reflect both tradition and contemporary charm. From the warmth of Islampuri woolen shawls to the delicacy of handcrafted stoles, Oraagh is where heritage meets modern elegance.
+                            </p>
+                            
+                            <div class="p-6 rounded-2xl" style="background: linear-gradient(135deg, rgba(139, 69, 19, 0.1), rgba(245, 245, 220, 0.3));">
+                                <p class="tagline-text text-2xl md:text-3xl font-bold text-center leading-relaxed">
+                                    "Discover the art of timeless elegance woven into every thread of perfection"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mission Statement -->
+            <div class="text-center fade-in-up" data-animate>
+                <div class="brand-story-card p-16 max-w-5xl mx-auto">
+                    <h3 class="oraagh-title text-3xl md:text-4xl font-bold mb-8">
+                        Our Mission
+                    </h3>
+                    <p class="text-xl leading-relaxed mb-8" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                        With our commitment to authenticity, sustainability, and the revival of cultural craftsmanship, Oraagh is not just a brand. It is a movement—to honor artisans, to revive traditions, and to bring you treasures that never fade with time.
+                    </p>
+                    <p class="tagline-text text-2xl md:text-3xl font-bold">
+                        Welcome to Oraagh—where every thread tells your story.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CEO Profile Section -->
+<!-- <section class="py-32 bg-white relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5">
+        <div class="absolute top-20 left-20 w-64 h-64 rounded-full blur-3xl animate-pulse" style="background: var(--primary-brown);"></div>
+        <div class="absolute bottom-20 right-20 w-96 h-96 rounded-full blur-3xl animate-pulse delay-1000" style="background: var(--gold);"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-6xl mx-auto">
+            !-- Section Header --
+            <div class="text-center mb-20 fade-in-up" data-animate>
+                <h2 class="oraagh-title text-5xl md:text-7xl font-black mb-8">
+                    Meet Our Visionary
+                </h2>
+                <div class="w-32 h-2 mx-auto mb-8 rounded-full" style="background: linear-gradient(90deg, var(--gold), var(--primary-brown), var(--gold-light));"></div>
+                <p class="text-2xl md:text-3xl font-light max-w-4xl mx-auto leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                    The creative force behind Oraagh's timeless elegance
+                </p>
+            </div> -->
+
+            <!-- CEO Profile Card
+            <div class="ceo-profile p-16 max-w-5xl mx-auto fade-in-up" data-animate>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    !-- CEO Photo 
+                    <div class="text-center lg:text-left">
+                        <div class="relative inline-block">
+                            <div class="w-80 h-80 mx-auto lg:mx-0 rounded-full overflow-hidden shadow-2xl border-8 border-white">
+                                <img src="/media/saud-profile.jpg" 
+                                     alt="Muhammad Saud - CEO of Oraagh" 
+                                     class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                            </div>
+                            <div class="absolute -bottom-4 -right-4 w-24 h-24 rounded-full flex items-center justify-center shadow-xl" 
+                                 style="background: linear-gradient(135deg, var(--gold), var(--primary-brown));">
+                                <i class="fas fa-crown text-white text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                     CEO Info 
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="oraagh-title text-4xl md:text-5xl font-black mb-4">
+                                Muhammad Saud
+                            </h3>
+                            <p class="text-2xl font-bold mb-6" style="color: var(--gold); font-family: 'Playfair Display', serif;">
+                                Chief Executive Officer & Founder
+                            </p>
+                            <div class="w-24 h-1 mb-8 rounded-full" style="background: linear-gradient(90deg, var(--primary-brown), var(--gold));"></div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <p class="text-lg leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                                With a deep-rooted passion for preserving traditional craftsmanship and an eye for contemporary elegance, Muhammad Saud founded Oraagh with a vision to bridge the gap between heritage and modernity.
+                            </p>
+                            
+                            <p class="text-lg leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                                His journey began in the textile valleys of Pakistan, where he witnessed firsthand the incredible artistry of local weavers. Inspired by their dedication and skill, he committed to creating a platform that would honor their craft while bringing these timeless pieces to a global audience.
+                            </p>
+                            
+                            <p class="text-lg leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                                Under his leadership, Oraagh has become synonymous with quality, authenticity, and the celebration of cultural heritage through fashion.
+                            </p>
+                        </div>
+
+                         CEO Quote 
+                        <div class="p-8 rounded-2xl relative" style="background: linear-gradient(135deg, rgba(139, 69, 19, 0.1), rgba(245, 245, 220, 0.3));">
+                            <div class="absolute -top-4 -left-4 w-12 h-12 rounded-full flex items-center justify-center" 
+                                 style="background: linear-gradient(135deg, var(--gold), var(--primary-brown));">
+                                <i class="fas fa-quote-left text-white text-xl"></i>
+                            </div>
+                            <blockquote class="text-xl font-medium leading-relaxed italic" style="color: var(--primary-brown-dark); font-family: 'Playfair Display', serif;">
+                                "Every thread we weave carries the dreams of our artisans and the heritage of our culture. At Oraagh, we don't just create products—we preserve legacies and tell stories that transcend generations."
+                            </blockquote>
+                            <cite class="block mt-4 text-lg font-bold" style="color: var(--gold);">— Muhammad Saud</cite>
+                        </div> --
+
+                        !-- Achievements --
+                        <div class="grid grid-cols-2 gap-8 pt-8">
+                            <div class="text-center">
+                                <div class="text-4xl font-black mb-2" style="color: var(--primary-brown);">15+</div>
+                                <div class="text-sm font-semibold uppercase tracking-wider" style="color: var(--neutral-brown-light);">Years Experience</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-4xl font-black mb-2" style="color: var(--primary-brown);">1000+</div>
+                                <div class="text-sm font-semibold uppercase tracking-wider" style="color: var(--neutral-brown-light);">Artisans Supported</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>-->
+
+<!-- Values Section -->
+<section class="py-32 heritage-section relative">
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <!-- Section Header -->
+            <div class="text-center mb-20 fade-in-up" data-animate>
+                <h2 class="oraagh-title text-5xl md:text-7xl font-black mb-8">
+                    Our Values
+                </h2>
+                <div class="w-32 h-2 mx-auto mb-8 rounded-full" style="background: linear-gradient(90deg, var(--gold), var(--primary-brown), var(--gold-light));"></div>
+                <p class="text-2xl md:text-3xl font-light max-w-4xl mx-auto leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                    The principles that guide our commitment to excellence
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="text-center group fade-in-up" data-animate>
+                    <div class="brand-story-card p-12 h-full">
+                        <div class="w-24 h-24 mx-auto mb-8 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-xl" 
+                             style="background: linear-gradient(135deg, var(--primary-brown), var(--gold));">
+                            <i class="fas fa-hands-helping text-white text-3xl"></i>
+                        </div>
+                        <h3 class="oraagh-title text-2xl font-bold mb-6">Artisan Partnership</h3>
+                        <p class="text-lg leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                            We work directly with skilled artisans, ensuring fair compensation and preserving traditional techniques passed down through generations.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="text-center group fade-in-up" data-animate data-delay="200">
+                    <div class="brand-story-card p-12 h-full">
+                        <div class="w-24 h-24 mx-auto mb-8 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-xl" 
+                             style="background: linear-gradient(135deg, var(--gold), var(--primary-brown));">
+                            <i class="fas fa-leaf text-white text-3xl"></i>
+                        </div>
+                        <h3 class="oraagh-title text-2xl font-bold mb-6">Sustainability</h3>
+                        <p class="text-lg leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                            Our commitment to eco-friendly practices and sustainable materials ensures that beauty doesn't come at the cost of our planet.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="text-center group fade-in-up" data-animate data-delay="400">
+                    <div class="brand-story-card p-12 h-full">
+                        <div class="w-24 h-24 mx-auto mb-8 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-xl" 
+                             style="background: linear-gradient(135deg, var(--primary-brown), var(--gold-light));">
+                            <i class="fas fa-gem text-white text-3xl"></i>
+                        </div>
+                        <h3 class="oraagh-title text-2xl font-bold mb-6">Timeless Quality</h3>
+                        <p class="text-lg leading-relaxed" style="color: var(--neutral-brown-light); font-family: 'Inter', sans-serif;">
+                            Every piece is crafted with meticulous attention to detail, using only the finest materials to create treasures that last a lifetime.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact CTA Section -->
+<section class="py-32 relative overflow-hidden" style="background: linear-gradient(135deg, var(--primary-brown) 0%, var(--primary-brown-dark) 50%, var(--neutral-brown-light) 100%);">
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-20 left-20 w-64 h-64 rounded-full blur-3xl animate-pulse" style="background: var(--gold);"></div>
+        <div class="absolute bottom-20 right-20 w-96 h-96 rounded-full blur-3xl animate-pulse delay-1000" style="background: var(--accent-cream);"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+        <div class="max-w-5xl mx-auto fade-in-up" data-animate>
+            <h2 class="text-5xl md:text-7xl font-black mb-8 text-white" style="font-family: 'Playfair Display', serif; text-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                Begin Your Journey
+            </h2>
+            <p class="text-2xl md:text-3xl font-light max-w-4xl mx-auto mb-16 leading-relaxed text-cream-100" style="font-family: 'Inter', sans-serif; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+                Discover the perfect piece that tells your unique story and connects you to centuries of craftsmanship
+            </p>
+            <div class="flex flex-col sm:flex-row gap-8 justify-center">
+                <a href="{% url 'products:product_list' %}" 
+                   class="group relative bg-white font-bold py-6 px-12 rounded-full text-xl transition-all duration-500 transform hover:scale-110 overflow-hidden shadow-2xl" style="color: var(--primary-brown);">
+                    <span class="relative z-10 flex items-center justify-center">
+                        <i class="fas fa-shopping-bag mr-3"></i>
+                        Explore Collection
+                    </span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-cream-100 to-warm-beige opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                </a>
+                <a href="{% url 'contact:contact_view' %}" 
+                   class="group bg-transparent border-4 border-white text-white hover:bg-white hover:text-brown-800 font-bold py-6 px-12 rounded-full text-xl transition-all duration-500 transform hover:scale-110">
+                    <span class="flex items-center justify-center group-hover:text-brown-800" style="transition: color 0.5s ease;">
+                        <i class="fas fa-envelope mr-3"></i>
+                        Get in Touch
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- JavaScript for Animations -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Intersection Observer for scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const element = entry.target;
+                const delay = element.dataset.delay ? parseInt(element.dataset.delay) : 0;
+                
+                setTimeout(() => {
+                    element.classList.add('animate');
+                }, delay);
+                
+                observer.unobserve(element);
+            }
+        });
+    }, observerOptions);
+
+    // Observe all elements with data-animate attribute
+    document.querySelectorAll('[data-animate]').forEach(el => {
+        observer.observe(el);
+    });
+
+    // Add missing animation keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes slideInFromBottom {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+});
+</script>
+
+{% endblock %}

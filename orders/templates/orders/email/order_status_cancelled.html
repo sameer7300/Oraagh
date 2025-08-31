@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Cancelled - Oraagh</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .email-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .status-badge {
+            background-color: #fc8181;
+            color: #1a202c;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        /* Content */
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+        
+        .message {
+            font-size: 16px;
+            margin-bottom: 25px;
+            color: #4a5568;
+        }
+        
+        /* Cancellation info */
+        .cancellation-info {
+            background-color: #fed7d7;
+            border: 1px solid #e53e3e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .cancellation-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #c53030;
+            margin-bottom: 15px;
+        }
+        
+        /* Order info */
+        .order-info {
+            background-color: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            border-left: 4px solid #D4AF37;
+        }
+        
+        .order-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #D4AF37;
+            margin-bottom: 15px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        .info-value {
+            color: #4a5568;
+        }
+        
+        /* Refund section */
+        .refund-section {
+            background: linear-gradient(135deg, #e6fffa, #b2f5ea);
+            border: 1px solid #38b2ac;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .refund-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c7a7b;
+            margin-bottom: 15px;
+        }
+        
+        .refund-text {
+            color: #2c7a7b;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        /* CTA Button */
+        .cta-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #D4AF37, #8B4513);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 0 10px;
+        }
+        
+        .cta-button.secondary {
+            background: linear-gradient(135deg, #4a5568, #2d3748);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #2d3748;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .footer .brand {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #D4AF37;
+        }
+        
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.8;
+        }
+        
+        .footer .contact-info {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .info-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .cta-button {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>❌ Order Cancelled</h1>
+            <p class="subtitle">Your order has been cancelled</p>
+            <div class="status-badge">Cancelled</div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <div class="greeting">
+                Hello {{ order.billing_name }},
+            </div>
+            
+            <div class="message">
+                We're writing to inform you that your order with <strong>Oraagh</strong> has been cancelled. 
+                We apologize for any inconvenience this may cause.
+            </div>
+            
+            <!-- Cancellation Info -->
+            <div class="cancellation-info">
+                <div class="cancellation-title">📋 Cancellation Details</div>
+                <div class="message">
+                    <strong>Reason:</strong> {{ cancellation_reason|default:"Order cancelled as requested" }}<br>
+                    <strong>Cancelled on:</strong> {{ order.updated_at|date:"F d, Y at g:i A" }}
+                </div>
+            </div>
+            
+            <!-- Order Info -->
+            <div class="order-info">
+                <div class="order-title">Cancelled Order Details</div>
+                <div class="info-row">
+                    <span class="info-label">Order Number:</span>
+                    <span class="info-value">{{ order.order_number }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Order Date:</span>
+                    <span class="info-value">{{ order.created_at|date:"F d, Y" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Total Amount:</span>
+                    <span class="info-value">PKR {{ order.total }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Payment Method:</span>
+                    <span class="info-value">{{ order.payment_method }}</span>
+                </div>
+            </div>
+            
+            <!-- Refund Section -->
+            {% if order.payment_method != "Cash on Delivery" %}
+            <div class="refund-section">
+                <div class="refund-title">💰 Refund Information</div>
+                <div class="refund-text">
+                    Since you paid online, a full refund of PKR {{ order.total }} will be processed 
+                    back to your original payment method within 5-7 business days.
+                </div>
+                <div class="refund-text">
+                    You will receive a separate email confirmation once the refund has been processed.
+                </div>
+            </div>
+            {% else %}
+            <div class="refund-section">
+                <div class="refund-title">💰 Payment Information</div>
+                <div class="refund-text">
+                    Since this was a Cash on Delivery order, no payment was processed. 
+                    No refund action is required.
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="message">
+                <strong>What happens next?</strong><br>
+                • Your order has been completely cancelled<br>
+                • No items will be shipped to you<br>
+                • Any payment charges will be refunded (if applicable)<br>
+                • You can place a new order anytime
+            </div>
+            
+            <div class="message">
+                We understand this cancellation may be disappointing. If you'd like to discuss this 
+                further or need assistance with a new order, our customer service team is here to help.
+            </div>
+            
+            <!-- CTA -->
+            <div class="cta-section">
+                <a href="{{ request.scheme }}://{{ request.get_host }}/products/" class="cta-button">
+                    🛍️ Continue Shopping
+                </a>
+                <a href="mailto:info@oraagh.com" class="cta-button secondary">
+                    📞 Contact Support
+                </a>
+            </div>
+            
+            <div class="message" style="margin-top: 25px; font-size: 14px; color: #718096;">
+                Questions about this cancellation? Contact us at 
+                <a href="mailto:info@oraagh.com" style="color: #D4AF37;">info@oraagh.com</a> 
+                or call +92 300 1234567
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="brand">ORAAGH</div>
+            <p>Premium Shawls & Elegant Fashion</p>
+            <div class="contact-info">
+                <p>📧 info@oraagh.com | 📞 +92 300 1234567</p>
+                <p>&copy; 2024 Oraagh. All rights reserved.</p>
+                <p style="margin-top: 15px; font-size: 12px;">
+                    We hope to serve you again in the future.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

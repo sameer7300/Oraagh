@@ -1,0 +1,82 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="bg-white p-8 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">
+            Search Results
+        </h1>
+        <p class="text-lg text-gray-600 mb-8">
+            Found <span class="font-semibold text-red-600">{{ total_results }}</span> result{{ total_results|pluralize }} for "<span class="font-semibold">{{ query }}</span>"
+        </p>
+
+        {% if product_results or lease_results %}
+            <!-- Product Results -->
+            {% if product_results %}
+                <div class="mb-12">
+                    <h2 class="text-2xl font-semibold text-gray-700 border-b-2 border-red-200 pb-2 mb-6">Products ({{ product_results|length }})</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {% for product in product_results %}
+                            <a href="{% url 'products:product_detail' product.slug %}" class="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+                                {% with product.media.first as media %}
+                                    <div class="h-48 overflow-hidden">
+                                        {% if media and media.media_file %}
+                                            <img src="{{ media.media_file.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        {% else %}
+                                            <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                                <span class="text-gray-500">No Image</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endwith %}
+                                <div class="p-4">
+                                    <h3 class="text-lg font-bold text-gray-800 truncate group-hover:text-red-600 transition-colors">{{ product.name }}</h3>
+                                    <p class="text-gray-600 font-semibold">PKR {{ product.price|floatformat:2 }}</p>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Lease Results -->
+            {% if lease_results %}
+                <div>
+                    <h2 class="text-2xl font-semibold text-gray-700 border-b-2 border-red-200 pb-2 mb-6">Leases ({{ lease_results|length }})</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {% for lease in lease_results %}
+                            <a href="{% url 'products:product_list' %}" class="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+                                {% with lease.media.first as media %}
+                                    <div class="h-48 overflow-hidden">
+                                        {% if media and media.media_file %}
+                                            <img src="{{ media.media_file.url }}" alt="{{ lease.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        {% else %}
+                                            <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                                <span class="text-gray-500">No Image</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endwith %}
+                                <div class="p-4">
+                                    <h3 class="text-lg font-bold text-gray-800 truncate group-hover:text-red-600 transition-colors">{{ lease.name }}</h3>
+                                    <p class="text-sm text-gray-500">{{ lease.location }}</p>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+        {% else %}
+            <div class="text-center py-12">
+                <p class="text-xl text-gray-500">No results found for "{{ query }}".</p>
+                <p class="text-gray-400 mt-2">Please try a different search term.</p>
+            </div>
+        {% endif %}
+
+        <div class="mt-12 text-center">
+            <a href="{% url 'core:home' %}" class="text-red-600 hover:text-red-800 font-semibold transition-colors">&larr; Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

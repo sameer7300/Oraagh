@@ -1,0 +1,211 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block extra_css %}
+{% if is_edit %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<style>
+    .tab-link.active {
+        border-color: var(--primary-red);
+        color: var(--primary-red);
+        background-color: rgba(220, 38, 38, 0.05);
+    }
+    #map {
+        height: 400px;
+        border-radius: 0.75rem;
+    }
+</style>
+{% endif %}
+{% endblock %}
+
+{% block page_title %}{% if is_edit %}Manage Mining Project{% else %}Add New Mining Project{% endif %}{% endblock %}
+{% block page_description %}{% if is_edit %}Update project details, media, team, and location{% else %}Create a new mining project in the system{% endif %}{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <!-- Back Button -->
+    <div class="mb-6 flex justify-between items-center">
+        <a href="{% url 'admin_dashboard:lease_list' %}" class="text-gray-500 hover:text-gray-800 flex items-center transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back to Mining Projects
+        </a>
+        {% if is_edit %}
+        <a href="{% url 'admin_dashboard:lease_delete' lease.id %}" class="text-red-500 hover:text-red-700 font-medium flex items-center gap-2 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-lg transition-colors">
+            <i class="fas fa-trash-alt"></i>
+            Delete Project
+        </a>
+        {% endif %}
+    </div>
+
+    {% if not is_edit %}
+    {# --- ADD FORM (NO TABS) --- #}
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-red-700 to-orange-600 px-6 py-4">
+            <h2 class="text-xl font-bold text-white flex items-center">
+                <i class="fas fa-plus mr-3"></i>
+                <span>Add New Mining Project</span>
+            </h2>
+        </div>
+        <form method="post" enctype="multipart/form-data" class="p-8 space-y-8">
+            {% csrf_token %}
+            {% include 'admin_dashboard/partials/lease_form_fields.html' %}
+            <div class="mt-8 pt-6 border-t border-gray-200 flex justify-end">
+                <button type="submit" class="btn-primary text-white font-bold px-8 py-3 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-plus mr-2"></i>
+                    Create Project
+                </button>
+            </div>
+        </form>
+    </div>
+    {% else %}
+    {# --- EDIT FORM (WITH TABS) --- #}
+    <div>
+        <!-- Tab Headers -->
+        <div class="mb-6 border-b border-gray-200">
+            <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                <button class="tab-link active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="overview">
+                    <i class="fas fa-file-alt mr-2"></i>Overview
+                </button>
+                <button class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="media">
+                    <i class="fas fa-images mr-2"></i>Media Gallery
+                </button>
+                <button class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="map">
+                    <i class="fas fa-map-marked-alt mr-2"></i>Interactive Map
+                </button>
+                <button class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="team">
+                    <i class="fas fa-users mr-2"></i>Team Members
+                </button>
+            </nav>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="tab-content">
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-pane active">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <form method="post" enctype="multipart/form-data" class="p-8 space-y-8">
+                        {% csrf_token %}
+                        {% include 'admin_dashboard/partials/lease_form_fields.html' %}
+                        <div class="mt-8 pt-6 border-t border-gray-200 flex justify-end">
+                            <button type="submit" class="btn-primary text-white font-bold px-8 py-3 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-save mr-2"></i>
+                                Update Project
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Media Gallery Tab -->
+            <div id="media" class="tab-pane hidden">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    {% include 'admin_dashboard/partials/lease_media_management.html' %}
+                </div>
+            </div>
+
+            <!-- Map Tab -->
+            <div id="map-tab" class="tab-pane hidden">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Project Location</h3>
+                    <div id="map"></div>
+                    <p class="text-sm text-gray-500 mt-2">Map centered on: <strong>{{ lease.location }}</strong>. Geocoding may not be exact.</p>
+                </div>
+            </div>
+
+            <!-- Team Tab -->
+                        <!-- Team Tab -->
+            <div id="team" class="tab-pane hidden">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    {% include 'admin_dashboard/partials/lease_team_management.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+{% if is_edit %}
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab functionality
+    const tabs = document.querySelectorAll('.tab-link');
+    const panes = document.querySelectorAll('.tab-pane');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            panes.forEach(pane => pane.classList.add('hidden'));
+            const activePaneId = tab.dataset.tab === 'map' ? 'map-tab' : tab.dataset.tab;
+            document.getElementById(activePaneId).classList.remove('hidden');
+        });
+    });
+
+    // Initialize map
+    const locationString = "{{ lease.location|escapejs }}";
+    if (locationString) {
+        const map = L.map('map').setView([20, 0], 2); // Default view
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${locationString}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    const lat = parseFloat(data[0].lat);
+                    const lon = parseFloat(data[0].lon);
+                    map.setView([lat, lon], 10);
+                    L.marker([lat, lon]).addTo(map)
+                        .bindPopup(`<b>{{ lease.name|escapejs }}</b><br>{{ lease.location|escapejs }}`)
+                        .openPopup();
+                } else {
+                     L.marker(map.getCenter()).addTo(map).bindPopup('Location not found, showing default view.');
+                }
+            })
+            .catch(err => {
+                console.error('Geocoding error:', err);
+                L.marker(map.getCenter()).addTo(map).bindPopup('Error finding location.');
+            });
+    }
+});
+</script>
+{% endif %}
+
+<script>
+// Form validation
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    if (form) {
+        const startDate = document.getElementById('start_date');
+        const endDate = document.getElementById('end_date');
+        
+        function validateDates() {
+            if (startDate && endDate && startDate.value && endDate.value) {
+                if (new Date(endDate.value) < new Date(startDate.value)) {
+                    endDate.setCustomValidity('End date must be after start date');
+                } else {
+                    endDate.setCustomValidity('');
+                }
+            }
+        }
+        
+        if(startDate) startDate.addEventListener('change', validateDates);
+        if(endDate) endDate.addEventListener('change', validateDates);
+        
+        form.addEventListener('submit', function(e) {
+            validateDates();
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

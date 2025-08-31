@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Processing - Oraagh</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .email-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #8B4513, #654321);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .status-badge {
+            background-color: #D4AF37;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        /* Content */
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+        
+        .message {
+            font-size: 16px;
+            margin-bottom: 25px;
+            color: #4a5568;
+        }
+        
+        /* Order info */
+        .order-info {
+            background-color: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            border-left: 4px solid #D4AF37;
+        }
+        
+        .order-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #D4AF37;
+            margin-bottom: 15px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        .info-value {
+            color: #4a5568;
+        }
+        
+        /* Progress section */
+        .progress-section {
+            background: linear-gradient(135deg, #fef5e7, #fed7aa);
+            border: 1px solid #D4AF37;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .progress-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 15px;
+        }
+        
+        .progress-text {
+            color: #744210;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .step {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .step.completed .step-icon {
+            background-color: #D4AF37;
+        }
+        
+        .step.current .step-icon {
+            background-color: #8B4513;
+            animation: pulse 2s infinite;
+        }
+        
+        .step.pending .step-icon {
+            background-color: #cbd5e0;
+            color: #718096;
+        }
+        
+        .step-label {
+            font-size: 12px;
+            color: #4a5568;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* CTA Button */
+        .cta-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #D4AF37, #8B4513);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #2d3748;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .footer .brand {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #D4AF37;
+        }
+        
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.8;
+        }
+        
+        .footer .contact-info {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .progress-steps {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .info-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🔄 Order Processing</h1>
+            <p class="subtitle">Your order is now being prepared</p>
+            <div class="status-badge">Processing</div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <div class="greeting">
+                Hello {{ order.billing_name }},
+            </div>
+            
+            <div class="message">
+                Great news! Your order at <strong>Oraagh</strong> has been confirmed and is now being processed. 
+                Our team is carefully preparing your premium shawls for shipment.
+            </div>
+            
+            <!-- Order Info -->
+            <div class="order-info">
+                <div class="order-title">Order Details</div>
+                <div class="info-row">
+                    <span class="info-label">Order Number:</span>
+                    <span class="info-value">{{ order.order_number }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Order Date:</span>
+                    <span class="info-value">{{ order.created_at|date:"F d, Y" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Total Amount:</span>
+                    <span class="info-value">PKR {{ order.total }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Payment Method:</span>
+                    <span class="info-value">{{ order.payment_method }}</span>
+                </div>
+            </div>
+            
+            <!-- Progress -->
+            <div class="progress-section">
+                <div class="progress-title">📦 Order Progress</div>
+                <div class="progress-text">
+                    Your order is currently being processed. We're carefully selecting and preparing your items.
+                </div>
+                
+                <div class="progress-steps">
+                    <div class="step completed">
+                        <div class="step-icon">✓</div>
+                        <div class="step-label">Order Placed</div>
+                    </div>
+                    <div class="step current">
+                        <div class="step-icon">⚙️</div>
+                        <div class="step-label">Processing</div>
+                    </div>
+                    <div class="step pending">
+                        <div class="step-icon">📦</div>
+                        <div class="step-label">Shipped</div>
+                    </div>
+                    <div class="step pending">
+                        <div class="step-icon">🏠</div>
+                        <div class="step-label">Delivered</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="message">
+                <strong>What happens next?</strong><br>
+                • We'll carefully select and quality-check your items<br>
+                • Your order will be securely packaged<br>
+                • You'll receive a shipping confirmation with tracking details<br>
+                • Estimated processing time: 1-2 business days
+            </div>
+            
+            <!-- CTA -->
+            <div class="cta-section">
+                <a href="{{ request.scheme }}://{{ request.get_host }}/accounts/profile/" class="cta-button">
+                    Track Your Order →
+                </a>
+            </div>
+            
+            <div class="message" style="margin-top: 25px; font-size: 14px; color: #718096;">
+                Questions about your order? Contact us at 
+                <a href="mailto:info@oraagh.com" style="color: #D4AF37;">info@oraagh.com</a> 
+                or call +92 300 1234567
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="brand">ORAAGH</div>
+            <p>Premium Shawls & Elegant Fashion</p>
+            <div class="contact-info">
+                <p>📧 info@oraagh.com | 📞 +92 300 1234567</p>
+                <p>&copy; 2024 Oraagh. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

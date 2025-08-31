@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ subject }}</title>
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
+    <style>
+        /* Reset styles */
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+
+        /* Main styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0 !important;
+            padding: 20px 0;
+            background-color: #f8f9fa;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        .email-wrapper {
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 20px 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+        }
+
+        /* Header styles */
+        .header {
+            background: linear-gradient(135deg, #8B4513, #D4AF37, #CD853F);
+            background-size: 300% 300%;
+            animation: gradientShift 6s ease infinite;
+            color: #ffffff;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+        }
+
+        .logo-container {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            max-width: 180px;
+            height: auto;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .header h1 {
+            position: relative;
+            z-index: 2;
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .header-subtitle {
+            position: relative;
+            z-index: 2;
+            margin: 8px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Content styles */
+        .content {
+            padding: 45px 40px;
+            background-color: #ffffff;
+        }
+
+        .content h2 {
+            margin: 0 0 25px 0;
+            font-size: 24px;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 3px solid #D4AF37;
+            padding-bottom: 12px;
+            display: inline-block;
+        }
+
+        .message-content {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #555555;
+            margin-bottom: 30px;
+        }
+
+        .message-content p {
+            margin: 0 0 16px 0;
+        }
+
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Call-to-action button */
+        .cta-container {
+            text-align: center;
+            margin: 35px 0 25px 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #D4AF37, #8B4513);
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Footer styles */
+        .footer {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: #bdc3c7;
+            padding: 35px 30px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .footer-content {
+            margin-bottom: 20px;
+        }
+
+        .footer p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .footer a {
+            color: #D4AF37;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .social-links {
+            margin: 20px 0 15px 0;
+        }
+
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: #bdc3c7;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #D4AF37;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #bdc3c7, transparent);
+            margin: 20px 0;
+        }
+
+        /* Responsive design */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                margin: 0 10px;
+                border-radius: 12px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 26px;
+            }
+            
+            .content {
+                padding: 30px 25px;
+            }
+            
+            .content h2 {
+                font-size: 20px;
+            }
+            
+            .message-content {
+                font-size: 15px;
+            }
+            
+            .footer {
+                padding: 25px 20px;
+            }
+
+            .cta-button {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+        }
+
+        @media only screen and (max-width: 480px) {
+            .email-container {
+                margin: 0 5px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .content {
+                padding: 25px 20px;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .content {
+                background-color: #ffffff;
+            }
+            
+            .message-content {
+                color: #555555;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-wrapper">
+        <div class="email-container">
+            <!-- Header Section -->
+            <div class="header">
+                <div class="logo-container">
+                    {% if logo_url %}
+                    <img src="{{ logo_url }}" alt="Oraagh Logo" class="logo">
+                    {% endif %}
+                </div>
+                <h1>Oraagh</h1>
+                <p class="header-subtitle">Premium Shawls & Elegant Fashion</p>
+            </div>
+
+            <!-- Content Section -->
+            <div class="content">
+                <h2>{{ subject }}</h2>
+                <div class="message-content">
+                    {{ message|linebreaksbr }}
+                </div>
+                
+                {% if cta_text and cta_url %}
+                <div class="cta-container">
+                    <a href="{{ cta_url }}" class="cta-button">{{ cta_text }}</a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Footer Section -->
+            <div class="footer">
+                <div class="footer-content">
+                    <p><strong>&copy; {% now "Y" %} Oraagh</strong></p>
+                    <p>All rights reserved. Unauthorized reproduction prohibited.</p>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="social-links">
+                    {% if social_links.website %}<a href="{{ social_links.website }}" title="Visit our website">🌐</a>{% endif %}
+                    {% if social_links.linkedin %}<a href="{{ social_links.linkedin }}" title="Follow us on LinkedIn">💼</a>{% endif %}
+                    {% if social_links.twitter %}<a href="{{ social_links.twitter }}" title="Follow us on Twitter">🐦</a>{% endif %}
+                </div>
+
+                <p>
+                    <a href="{{ contact_url|default:'#' }}">Contact Us</a> | 
+                    <a href="{{ privacy_url|default:'#' }}">Privacy Policy</a> | 
+                    <a href="{{ unsubscribe_url|default:'#' }}">Unsubscribe</a>
+                </p>
+
+                <p style="font-size: 11px; opacity: 0.8; margin-top: 15px;">
+                    Contact us at <a href="mailto:info@oraagh.com" style="color: #D4AF37;">info@oraagh.com</a><br>
+                    You received this email because you are subscribed to Oraagh communications.<br>
+                    If you no longer wish to receive these emails, please click the unsubscribe link above.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

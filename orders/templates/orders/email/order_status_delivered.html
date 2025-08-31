@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Delivered - Oraagh</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .email-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #38a169, #2f855a);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .status-badge {
+            background-color: #68d391;
+            color: #1a202c;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        /* Content */
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+        
+        .message {
+            font-size: 16px;
+            margin-bottom: 25px;
+            color: #4a5568;
+        }
+        
+        /* Celebration section */
+        .celebration {
+            background: linear-gradient(135deg, #f0fff4, #c6f6d5);
+            border: 2px solid #38a169;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .celebration-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2f855a;
+            margin-bottom: 15px;
+        }
+        
+        .celebration-text {
+            color: #2f855a;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .celebration-emoji {
+            font-size: 48px;
+            margin: 15px 0;
+        }
+        
+        /* Order info */
+        .order-info {
+            background-color: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            border-left: 4px solid #D4AF37;
+        }
+        
+        .order-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #D4AF37;
+            margin-bottom: 15px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        .info-value {
+            color: #4a5568;
+        }
+        
+        /* Review section */
+        .review-section {
+            background: linear-gradient(135deg, #fef5e7, #fed7aa);
+            border: 1px solid #D4AF37;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .review-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 15px;
+        }
+        
+        .review-text {
+            color: #744210;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .stars {
+            font-size: 24px;
+            color: #D4AF37;
+            margin: 10px 0;
+        }
+        
+        /* CTA Button */
+        .cta-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #D4AF37, #8B4513);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 0 10px;
+        }
+        
+        .cta-button.secondary {
+            background: linear-gradient(135deg, #38a169, #2f855a);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #2d3748;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .footer .brand {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #D4AF37;
+        }
+        
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.8;
+        }
+        
+        .footer .contact-info {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .info-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .cta-button {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎉 Order Delivered!</h1>
+            <p class="subtitle">Your premium shawls have arrived</p>
+            <div class="status-badge">Delivered</div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <div class="greeting">
+                Hello {{ order.billing_name }},
+            </div>
+            
+            <!-- Celebration -->
+            <div class="celebration">
+                <div class="celebration-emoji">🎊</div>
+                <div class="celebration-title">Delivery Complete!</div>
+                <div class="celebration-text">
+                    Your order from <strong>Oraagh</strong> has been successfully delivered! 
+                    We hope you love your new premium shawls.
+                </div>
+            </div>
+            
+            <div class="message">
+                Thank you for choosing Oraagh for your premium shawl needs. Your order has been delivered to:
+                <br><strong>{{ order.shipping_address }}, {{ order.shipping_city }}</strong>
+            </div>
+            
+            <!-- Order Info -->
+            <div class="order-info">
+                <div class="order-title">Delivered Order Details</div>
+                <div class="info-row">
+                    <span class="info-label">Order Number:</span>
+                    <span class="info-value">{{ order.order_number }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Order Date:</span>
+                    <span class="info-value">{{ order.created_at|date:"F d, Y" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Delivery Date:</span>
+                    <span class="info-value">{{ order.updated_at|date:"F d, Y" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Total Amount:</span>
+                    <span class="info-value">PKR {{ order.total }}</span>
+                </div>
+            </div>
+            
+            <!-- Review Section -->
+            <div class="review-section">
+                <div class="review-title">⭐ How was your experience?</div>
+                <div class="review-text">
+                    We'd love to hear about your experience with your new shawls! 
+                    Your feedback helps us serve you better.
+                </div>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+            </div>
+            
+            <div class="message">
+                <strong>Care Instructions:</strong><br>
+                • Dry clean only for best results<br>
+                • Store in a cool, dry place<br>
+                • Handle with care to maintain quality<br>
+                • Avoid direct sunlight for extended periods
+            </div>
+            
+            <div class="message">
+                <strong>Need Support?</strong><br>
+                If you have any issues with your order or need assistance, 
+                please don't hesitate to contact our customer service team.
+            </div>
+            
+            <!-- CTA -->
+            <div class="cta-section">
+                <a href="{{ request.scheme }}://{{ request.get_host }}/products/" class="cta-button">
+                    🛍️ Shop More
+                </a>
+                <a href="#" class="cta-button secondary">
+                    ⭐ Leave Review
+                </a>
+            </div>
+            
+            <div class="message" style="margin-top: 25px; font-size: 14px; color: #718096;">
+                Questions or concerns? Contact us at 
+                <a href="mailto:info@oraagh.com" style="color: #D4AF37;">info@oraagh.com</a> 
+                or call +92 300 1234567
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="brand">ORAAGH</div>
+            <p>Premium Shawls & Elegant Fashion</p>
+            <div class="contact-info">
+                <p>📧 info@oraagh.com | 📞 +92 300 1234567</p>
+                <p>&copy; 2024 Oraagh. All rights reserved.</p>
+                <p style="margin-top: 15px; font-size: 12px;">
+                    Thank you for choosing Oraagh. We appreciate your business!
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

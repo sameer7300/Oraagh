@@ -1,0 +1,1050 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - Unique & Antique{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'products/css/product_detail.css' %}">
+<style>
+    /* Import Oraagh Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;600;700&display=swap');
+    
+    /* Oraagh Color Variables */
+    :root {
+        --primary-brown: #8B4513;
+        --primary-brown-dark: #654321;
+        --accent-cream: #F5F5DC;
+        --neutral-black: #000000;
+        --neutral-brown-light: #A0522D;
+        --background-cream: #F5F5DC;
+        --background-cream-light: #FEFEFE;
+        --glass-bg: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.2);
+        --shimmer: linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 0.3) 50%, transparent 60%);
+    }
+    
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #F5F5DC 0%, #FEFEFE 50%, #F5F5DC 100%);
+        min-height: 100vh;
+    }
+    
+    /* Oraagh Card Styling */
+    .oraagh-card {
+        background: linear-gradient(145deg, rgba(245, 245, 220, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+        border: 2px solid rgba(139, 69, 19, 0.2);
+        border-radius: 25px;
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        box-shadow: 0 20px 60px rgba(139, 69, 19, 0.15);
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+    }
+    
+    .oraagh-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 30px 80px rgba(139, 69, 19, 0.25);
+        border-color: rgba(139, 69, 19, 0.3);
+    }
+    
+    /* Typography */
+    .oraagh-title {
+        font-family: 'Playfair Display', serif;
+        color: var(--primary-brown-dark);
+        font-weight: 900;
+    }
+    
+    .oraagh-subtitle {
+        font-family: 'Playfair Display', serif;
+        color: var(--primary-brown);
+        font-weight: 700;
+    }
+    
+    .oraagh-text {
+        font-family: 'Inter', sans-serif;
+        color: var(--neutral-brown-light);
+    }
+    
+    .oraagh-accent {
+        color: var(--primary-brown);
+        font-weight: 600;
+    }
+    
+    /* Price Styling */
+    .oraagh-price {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, var(--neutral-brown-light) 50%, var(--primary-brown-dark) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-family: 'Playfair Display', serif;
+        font-weight: 900;
+    }
+    
+    /* Button Styling */
+    .oraagh-btn-primary {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, var(--neutral-brown-light) 100%);
+        color: var(--accent-cream);
+        border: 2px solid rgba(245, 245, 220, 0.3);
+        border-radius: 30px;
+        font-weight: 700;
+        font-family: 'Inter', sans-serif;
+        backdrop-filter: blur(15px) saturate(180%);
+        -webkit-backdrop-filter: blur(15px) saturate(180%);
+        box-shadow: 0 8px 32px rgba(139, 69, 19, 0.3);
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .oraagh-btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(245, 245, 220, 0.3), transparent);
+        transition: left 0.6s;
+    }
+    
+    .oraagh-btn-primary:hover::before {
+        left: 100%;
+    }
+    
+    .oraagh-btn-primary:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 20px 40px rgba(139, 69, 19, 0.5);
+        background: linear-gradient(135deg, var(--primary-brown-dark) 0%, var(--primary-brown) 100%);
+        border-color: rgba(245, 245, 220, 0.5);
+    }
+    
+    .oraagh-btn-secondary {
+        background: rgba(245, 245, 220, 0.15);
+        border: 2px solid rgba(139, 69, 19, 0.6);
+        color: var(--primary-brown);
+        border-radius: 30px;
+        font-weight: 700;
+        font-family: 'Inter', sans-serif;
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+        box-shadow: 0 8px 32px rgba(139, 69, 19, 0.2);
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+    }
+    
+    .oraagh-btn-secondary:hover {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, var(--neutral-brown-light) 100%);
+        color: var(--accent-cream);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 20px 40px rgba(139, 69, 19, 0.4);
+    }
+    
+    /* Image Gallery */
+    .oraagh-image {
+        border-radius: 20px;
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+        box-shadow: 0 10px 40px rgba(139, 69, 19, 0.2);
+    }
+    
+    .oraagh-image:hover {
+        transform: scale(1.02);
+        box-shadow: 0 20px 60px rgba(139, 69, 19, 0.3);
+    }
+    
+    .oraagh-thumbnail {
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .oraagh-thumbnail:hover,
+    .oraagh-thumbnail.active {
+        border-color: var(--primary-brown);
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
+    }
+    
+    /* Tab Styling */
+    .oraagh-tab {
+        color: var(--neutral-brown-light);
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border-bottom: 3px solid transparent;
+    }
+    
+    .oraagh-tab.tab-active {
+        color: var(--primary-brown);
+        border-bottom-color: var(--primary-brown);
+    }
+    
+    .oraagh-tab:hover {
+        color: var(--primary-brown-dark);
+    }
+    
+    /* Form Styling */
+    .oraagh-form-field {
+        background: linear-gradient(90deg, transparent 0%, rgba(139, 69, 19, 0.05) 50%, transparent 100%);
+        border-bottom: 3px solid rgba(139, 69, 19, 0.3);
+        color: var(--primary-brown-dark);
+        font-family: 'Inter', sans-serif;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+    }
+    
+    .oraagh-form-field:focus {
+        background: linear-gradient(90deg, transparent 0%, rgba(139, 69, 19, 0.12) 50%, transparent 100%);
+        border-bottom-color: var(--primary-brown);
+        box-shadow: 0 8px 25px rgba(139, 69, 19, 0.25);
+    }
+    
+    /* Badge Styling */
+    .oraagh-badge {
+        background: linear-gradient(135deg, rgba(139, 69, 19, 0.15) 0%, rgba(160, 82, 45, 0.1) 100%);
+        color: var(--primary-brown);
+        border: 1px solid rgba(139, 69, 19, 0.3);
+        border-radius: 20px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    /* Stock Status */
+    .stock-in-stock {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(22, 163, 74, 0.1) 100%);
+        color: #059669;
+        border-color: rgba(34, 197, 94, 0.3);
+    }
+    
+    .stock-low-stock {
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
+        color: #d97706;
+        border-color: rgba(251, 191, 36, 0.3);
+    }
+    
+    .stock-out-of-stock {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.1) 100%);
+        color: #dc2626;
+        border-color: rgba(239, 68, 68, 0.3);
+    }
+    
+    /* Star Rating */
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+    }
+    
+    .star-rating input[type="radio"] {
+        display: none;
+    }
+    
+    .star-rating label {
+        color: #ddd;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    
+    .star-rating label:hover,
+    .star-rating label:hover ~ label,
+    .star-rating input[type="radio"]:checked ~ label {
+        color: var(--primary-brown);
+    }
+    
+    /* Message Cards */
+    .message-card {
+        background: linear-gradient(145deg, rgba(245, 245, 220, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+        border: 2px solid rgba(139, 69, 19, 0.2);
+        border-radius: 20px;
+        backdrop-filter: blur(15px) saturate(180%);
+        -webkit-backdrop-filter: blur(15px) saturate(180%);
+    }
+    
+    .message-card.success {
+        border-color: rgba(34, 197, 94, 0.3);
+    }
+    
+    .message-card.error {
+        border-color: rgba(239, 68, 68, 0.3);
+    }
+    
+    /* Animations */
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(200%); }
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+        animation: fadeIn 0.6s ease-out;
+    }
+    
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        .oraagh-card {
+            border-radius: 20px;
+            margin: 0 -1rem;
+            padding: 1.5rem;
+        }
+        
+        .oraagh-title {
+            font-size: 2rem;
+            line-height: 1.2;
+        }
+        
+        .oraagh-subtitle {
+            font-size: 1.5rem;
+        }
+        
+        .oraagh-price {
+            font-size: 2rem;
+        }
+        
+        .oraagh-btn-primary,
+        .oraagh-btn-secondary {
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+        }
+        
+        .oraagh-thumbnail {
+            width: 4rem;
+            height: 4rem;
+        }
+        
+        .star-rating label {
+            font-size: 1.5rem;
+        }
+        
+        .container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        .grid-cols-1 {
+            gap: 2rem;
+        }
+        
+        .space-x-8 {
+            gap: 1rem;
+        }
+        
+        .oraagh-tab {
+            font-size: 0.9rem;
+            padding: 0.75rem 0.5rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .oraagh-card {
+            margin: 0 -0.5rem;
+            padding: 1rem;
+        }
+        
+        .oraagh-title {
+            font-size: 1.75rem;
+        }
+        
+        .oraagh-price {
+            font-size: 1.5rem;
+        }
+        
+        .text-4xl {
+            font-size: 1.75rem;
+        }
+        
+        .text-2xl {
+            font-size: 1.25rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Navigation -->
+<nav class="bg-gradient-to-r from-stone-50 to-cream-50 border-b border-stone-200 py-4 mb-8">
+    <div class="container mx-auto px-4">
+        <div class="flex items-center space-x-2 text-sm oraagh-text">
+            <a href="{% url 'core:home' %}" class="hover:text-stone-800 transition-colors oraagh-accent">Home</a>
+            <span class="text-stone-400">›</span>
+            <a href="{% url 'products:product_list' %}" class="hover:text-stone-800 transition-colors oraagh-accent">Products</a>
+            <span class="text-stone-400">›</span>
+            <span class="oraagh-title font-semibold">{{ product.name }}</span>
+        </div>
+    </div>
+</nav>
+
+<div class="container mx-auto px-4 py-8">
+
+  {% if messages %}
+  <div id="messages-container" class="fixed top-28 right-8 z-[1000] space-y-4">
+      {% for message in messages %}
+      <div class="message-card {{ message.tags }} p-4 rounded-lg shadow-xl flex items-start transition-all duration-300 transform fade-in" role="alert">
+          <div class="mr-3 text-2xl">
+              {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                  <i class="fas fa-check-circle text-green-400"></i>
+              {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                  <i class="fas fa-times-circle text-red-400"></i>
+              {% else %}
+                  <i class="fas fa-info-circle text-blue-400"></i>
+              {% endif %}
+          </div>
+          <div class="flex-grow">
+              <p class="font-bold">{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}Success{% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error{% else %}Notice{% endif %}</p>
+              <p class="text-sm">{{ message }}</p>
+          </div>
+          <button type="button" class="ml-4 -mx-1.5 -my-1.5 rounded-lg p-1.5 inline-flex h-8 w-8" aria-label="Close" onclick="this.parentElement.style.opacity=0; setTimeout(() => this.parentElement.remove(), 300);">
+              <span class="sr-only">Close</span>
+              <i class="fas fa-times"></i>
+          </button>
+      </div>
+      {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Product Details -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+    
+    <!-- Media Gallery -->
+    <div class="space-y-6 fade-in">
+      <!-- Main Image -->
+      <div class="oraagh-card aspect-square overflow-hidden group relative cursor-pointer" onclick="openLightbox()">
+        <img id="main-image" 
+             src="{{ product.media.first.media_file.url }}" 
+             alt="{{ product.name }}" 
+             class="oraagh-image w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+             data-current-index="0">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6 pointer-events-none">
+          <span class="oraagh-btn-secondary px-6 py-2 text-sm">Click to Enlarge</span>
+        </div>
+      </div>
+      
+      <!-- Thumbnail Gallery -->
+      {% if product.media.count > 1 %}
+      <div class="flex space-x-3 overflow-x-auto pb-2">
+        {% for media in product.media.all %}
+        <img src="{{ media.media_file.url }}" 
+             alt="{{ product.name }}" 
+             class="oraagh-thumbnail w-20 h-20 object-cover cursor-pointer flex-shrink-0 {% if forloop.first %}active{% endif %}"
+             data-index="{{ forloop.counter0 }}"
+             onclick="changeMainImage('{{ media.media_file.url }}', this, '{{ forloop.counter0 }}');">
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Right Column: Product Info & Actions -->
+    <div class="oraagh-card p-8 flex flex-col fade-in" style="animation-delay: 0.2s;">
+      <div class="flex-grow">
+        {% if product.category %}
+          <a href="#" class="oraagh-badge px-4 py-2 text-sm uppercase tracking-wider inline-block mb-4 hover:scale-105 transition-transform">{{ product.category.name }}</a>
+        {% endif %}
+        <h1 class="oraagh-title text-4xl lg:text-5xl my-6 leading-tight">{{ product.name }}</h1>
+        
+        {% if product.price %}
+          <div class="oraagh-card p-6 mb-6 bg-gradient-to-br from-stone-50 to-cream-50">
+            <div class="flex items-center gap-4 mb-3">
+              <p class="oraagh-text text-xl font-medium">Base Price:</p>
+              <p class="oraagh-price text-2xl">PKR {{ product.price|floatformat:2 }}</p>
+            </div>
+            
+            {% if product.tax_percentage > 0 %}
+            <div class="flex items-center gap-4 mb-3">
+              <p class="oraagh-text text-lg">Tax ({{ product.tax_percentage }}%):</p>
+              <p class="text-lg font-semibold text-amber-600">PKR {{ product.get_tax_amount|floatformat:2 }}</p>
+            </div>
+            <div class="border-t border-stone-300 pt-4">
+              <div class="flex items-center gap-4">
+                <p class="oraagh-subtitle text-2xl">Total Price:</p>
+                <p class="oraagh-price text-4xl">PKR {{ product.get_price_with_tax|floatformat:2 }}</p>
+              </div>
+              <p class="oraagh-text text-sm mt-2">(Including {{ product.tax_percentage }}% tax)</p>
+            </div>
+            {% else %}
+            <div class="border-t border-stone-300 pt-4">
+              <div class="flex items-center gap-4">
+                <p class="oraagh-subtitle text-2xl">Total Price:</p>
+                <p class="oraagh-price text-4xl">PKR {{ product.price|floatformat:2 }}</p>
+              </div>
+              <p class="oraagh-text text-sm mt-2">(Tax-free)</p>
+            </div>
+            {% endif %}
+          </div>
+        {% else %}
+          <p class="oraagh-price text-3xl mb-6">Price on request</p>
+        {% endif %}
+
+        <div class="oraagh-text prose prose-lg max-w-none mb-6">
+          {{ product.description|truncatewords:30|linebreaks }}
+        </div>
+
+        <h2 class="oraagh-subtitle text-xl mb-4 border-t border-stone-300 pt-6">Item Details</h2>
+        <div class="space-y-4">
+            <div class="flex items-center">
+                <i class="fas fa-barcode fa-fw w-6 text-center oraagh-accent mr-3"></i>
+                <strong class="oraagh-text font-semibold w-28">SKU</strong>
+                <span class="oraagh-badge px-3 py-1 font-mono text-sm">{{ product.sku|default:'N/A' }}</span>
+            </div>
+            <div class="flex items-center">
+                <i class="fas fa-tag fa-fw w-6 text-center oraagh-accent mr-3"></i>
+                <strong class="oraagh-text font-semibold w-28">Category</strong>
+                <span class="oraagh-text">{{ product.category.name|default:'Antique' }}</span>
+            </div>
+            <div class="flex items-center">
+                <i class="fas fa-boxes fa-fw w-6 text-center oraagh-accent mr-3"></i>
+                <strong class="oraagh-text font-semibold w-28">Availability</strong>
+                <span id="stock-status-badge" class="oraagh-badge px-3 py-1 text-sm font-bold {% if product.stock_quantity > 10 %}stock-in-stock{% elif product.stock_quantity > 0 %}stock-low-stock{% else %}stock-out-of-stock{% endif %}" data-stock="{{ product.stock_quantity }}">
+                  {% if product.stock_quantity > 0 %}Available{% else %}Sold{% endif %}
+                </span>
+            </div>
+            <div class="flex items-center">
+                <i class="fas fa-calendar fa-fw w-6 text-center oraagh-accent mr-3"></i>
+                <strong class="oraagh-text font-semibold w-28">Era/Period</strong>
+                <span class="oraagh-text">{{ product.weight|default:'Contact for details' }}</span>
+            </div>
+        </div>
+      </div>
+
+      <!-- Delivery Information -->
+      <div class="mt-8 pt-8 border-t border-stone-300">
+        <h3 class="oraagh-text font-bold text-lg mb-4 flex items-center">
+          <i class="fas fa-truck mr-3 oraagh-accent"></i>
+          Delivery Options
+        </h3>
+        <div class="space-y-3">
+          {% for delivery in delivery_charges %}
+          <div class="flex justify-between items-center p-3 bg-stone-50 rounded-lg">
+            <div>
+              <span class="font-semibold oraagh-text">{{ delivery.name }}</span>
+              <div class="text-sm text-stone-600">
+                {{ delivery.estimated_days }} day{% if delivery.estimated_days != 1 %}s{% endif %}
+                {% if delivery.description %} - {{ delivery.description }}{% endif %}
+              </div>
+            </div>
+            <span class="font-bold oraagh-accent">
+              {% if delivery.charge == 0 %}
+                FREE
+              {% else %}
+                PKR {{ delivery.charge }}
+              {% endif %}
+            </span>
+          </div>
+          {% empty %}
+          <div class="p-3 bg-stone-50 rounded-lg text-center text-stone-600">
+            Contact us for delivery information
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="mt-8 pt-8 border-t border-stone-300 space-y-4">
+        {% if product.stock_quantity > 0 %}
+          <form method="post" action="{% url 'orders:add_to_cart' product.id %}" class="w-full">
+            {% csrf_token %}
+            <button type="submit" class="oraagh-btn-primary w-full py-4 px-6 flex items-center justify-center text-lg">
+              <i class="fas fa-shopping-cart mr-3"></i>
+              Add to Cart
+            </button>
+          </form>
+        {% else %}
+          <button disabled class="w-full bg-gray-400 text-white font-bold py-4 px-6 rounded-lg cursor-not-allowed flex items-center justify-center text-lg">
+            <i class="fas fa-times mr-3"></i>
+            Currently Unavailable
+          </button>
+        {% endif %}
+        <button onclick="document.getElementById('deal-tab').click(); document.getElementById('deal-request-form').scrollIntoView({ behavior: 'smooth' });" class="oraagh-btn-secondary w-full py-4 px-6 flex items-center justify-center text-lg">
+          <i class="fas fa-envelope mr-3"></i>
+          Inquire About This Item
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs Section -->
+  <div class="oraagh-card mt-8 p-8 fade-in" style="animation-delay: 0.4s;">
+    <!-- Tabs Navigation -->
+    <div class="relative border-b border-stone-300 mb-8">
+      <nav id="tabs-container" class="flex space-x-8" aria-label="Tabs">
+        <button id="overview-tab" onclick="switchTab('overview', this)" class="oraagh-tab tab-active whitespace-nowrap py-4 px-1 text-lg">
+          Overview
+        </button>
+        <button id="reviews-tab" onclick="switchTab('reviews', this)" class="oraagh-tab whitespace-nowrap py-4 px-1 text-lg">
+          Reviews ({{ review_count }})
+        </button>
+        <button id="deal-tab" onclick="switchTab('deal', this)" class="oraagh-tab whitespace-nowrap py-4 px-1 text-lg">
+          Inquire
+        </button>
+      </nav>
+      <div id="tab-glider" class="absolute bottom-0 h-0.5 bg-gradient-to-r from-transparent via-stone-600 to-transparent transition-all duration-300 ease-in-out"></div>
+    </div>
+
+    <!-- Tab Content -->
+    <div>
+      <!-- Overview Content -->
+      <div id="overview-panel" class="tab-panel active">
+        <div class="prose max-w-none mb-8">
+          <h3 class="oraagh-subtitle text-xl mb-4">Product Description</h3>
+          <div class="oraagh-text leading-relaxed">{{ product.description|linebreaks }}</div>
+        </div>
+        <h3 class="oraagh-subtitle text-xl mb-6">Item Specifications</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full">
+            <tbody class="divide-y divide-stone-200">
+              <tr class="hover:bg-stone-50/50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap oraagh-text font-semibold">SKU</td>
+                <td class="px-6 py-4 whitespace-nowrap oraagh-text">{{ product.sku|default:'N/A' }}</td>
+              </tr>
+              <tr class="hover:bg-stone-50/50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap oraagh-text font-semibold">Category</td>
+                <td class="px-6 py-4 whitespace-nowrap oraagh-text">{{ product.category.name|default:'Antique' }}</td>
+              </tr>
+              <tr class="hover:bg-stone-50/50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap oraagh-text font-semibold">Condition</td>
+                <td class="px-6 py-4 whitespace-nowrap oraagh-text">{{ product.weight|default:'Excellent' }}</td>
+              </tr>
+              <tr class="hover:bg-stone-50/50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap oraagh-text font-semibold">Date Added</td>
+                <td class="px-6 py-4 whitespace-nowrap oraagh-text">{{ product.created_at|date:"F d, Y" }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Reviews Content -->
+      <div id="reviews-panel" class="tab-panel hidden">
+        <div class="oraagh-card p-6">
+          <div class="flex flex-wrap items-center mb-6 border-b border-stone-300 pb-4">
+            <h3 class="oraagh-subtitle text-2xl">Customer Reviews</h3>
+            {% if average_rating %}
+              <div class="flex items-center ml-auto">
+                <div class="star-display text-2xl text-amber-500">{% for i in ''|center:average_rating_int %}★{% endfor %}</div>
+                <div class="ml-3 text-right">
+                  <p class="oraagh-text text-xl font-bold">{{ average_rating|floatformat:1 }} <span class="text-base font-normal">/ 5</span></p>
+                  <p class="oraagh-text text-sm">from {{ review_count }} review{{ review_count|pluralize }}</p>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+          <div class="space-y-6 mb-8">
+              {% for review in approved_reviews %}
+                  <div class="oraagh-card p-4 flex items-start space-x-4">
+                      <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-stone-100 to-stone-200 rounded-full flex items-center justify-center">
+                          <i class="fas fa-user oraagh-accent text-xl"></i>
+                      </div>
+                      <div class="flex-1">
+                          <div class="flex items-center justify-between">
+                              <p class="oraagh-text font-bold">{{ review.author }}</p>
+                              <div class="star-display text-amber-500">{% for i in ''|center:review.rating_int %}★{% endfor %}</div>
+                          </div>
+                          <p class="oraagh-text text-sm mb-2">{{ review.created_at|date:"F d, Y" }}</p>
+                          <p class="oraagh-text leading-relaxed">{{ review.comment }}</p>
+                      </div>
+                  </div>
+              {% empty %}
+                  <div class="oraagh-card text-center py-8 px-4 border-2 border-dashed border-stone-300">
+                      <i class="fas fa-comment-slash text-4xl oraagh-accent mb-2 opacity-50"></i>
+                      <p class="oraagh-text">No reviews yet. Be the first to share your thoughts!</p>
+                  </div>
+              {% endfor %}
+          </div>
+          <div class="oraagh-card p-6">
+            <h3 class="oraagh-subtitle text-xl mb-4">Leave a Review</h3>
+            <form action="{% url 'products:submit_review' product.slug %}" method="POST" class="space-y-6">
+                {% csrf_token %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="author" class="block text-sm font-medium oraagh-text mb-2">Your Name</label>
+                        <div class="relative z-0">
+                            <input type="text" name="author" id="author" class="oraagh-form-field block w-full py-2.5 px-0 text-sm bg-transparent border-0 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required>
+                            <i class="fas fa-user absolute right-0 top-1/2 -translate-y-1/2 oraagh-accent transition-colors duration-300"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium oraagh-text mb-2">Your Email</label>
+                        <div class="relative z-0">
+                            <input type="email" name="email" id="email" class="oraagh-form-field block w-full py-2.5 px-0 text-sm bg-transparent border-0 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required>
+                            <i class="fas fa-envelope absolute right-0 top-1/2 -translate-y-1/2 oraagh-accent transition-colors duration-300"></i>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium oraagh-text mb-2">Your Rating</label>
+                  <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5" required/><label for="star5" title="5 stars">★</label>
+                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars">★</label>
+                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars">★</label>
+                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars">★</label>
+                    <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">★</label>
+                  </div>
+                </div>
+                <div class="relative z-0">
+                    <label for="comment" class="block text-sm font-medium oraagh-text mb-2">Your Review</label>
+                    <textarea name="comment" id="comment" rows="4" class="oraagh-form-field block w-full py-2.5 px-0 text-sm bg-transparent border-0 appearance-none focus:outline-none focus:ring-0" placeholder=" " required></textarea>
+                </div>
+                <div class="text-right">
+                    <button type="submit" class="oraagh-btn-primary inline-flex items-center py-3 px-6">
+                        <i class="fas fa-paper-plane mr-2"></i>
+                        Submit Review
+                    </button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deal Request Content -->
+      <div id="deal-panel" class="tab-panel hidden">
+        <div class="oraagh-card p-8">
+          <div class="text-center mb-8">
+            <h3 class="oraagh-subtitle text-2xl">Inquire About This Item</h3>
+            <p class="oraagh-text mt-2">Have questions about this antique? Want to know more details? Contact us.</p>
+          </div>
+          <form id="deal-request-form" action="{% url 'products:request_deal' product.slug %}" method="POST" class="space-y-6">
+              {% csrf_token %}
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                      <label class="block text-sm font-medium oraagh-text mb-2">Full Name</label>
+                      <div class="relative z-0">
+                          {{ deal_form.name }}
+                          <i class="fas fa-user absolute right-0 top-1/2 -translate-y-1/2 oraagh-accent transition-colors duration-300"></i>
+                      </div>
+                  </div>
+                  <div>
+                      <div class="relative z-0">
+                          {{ deal_form.email }}
+                          <label for="{{ deal_form.email.id_for_label }}" class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-red-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email Address</label>
+                          <i class="fas fa-envelope absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 peer-focus:text-red-600 transition-colors duration-300"></i>
+                      </div>
+                  </div>
+                  <div class="md:col-span-2">
+                      <div class="relative z-0">
+                          {{ deal_form.phone_number }}
+                          <label for="{{ deal_form.phone_number.id_for_label }}" class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-red-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Phone Number</label>
+                          <i class="fas fa-phone absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 peer-focus:text-red-600 transition-colors duration-300"></i>
+                      </div>
+                  </div>
+                  <div class="md:col-span-2">
+                      <div class="relative z-0 mt-1">
+                          {{ deal_form.message }}
+                          <label for="{{ deal_form.message.id_for_label }}" class="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-red-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Your Message</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="text-center pt-4">
+                  <button type="submit" class="w-full md:w-auto inline-flex justify-center items-center py-3 px-8 border border-transparent shadow-sm text-base font-medium rounded-full text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105 active:scale-95 transition-transform duration-300">
+                      <i class="fas fa-paper-plane mr-3"></i>
+                      Send Inquiry
+                  </button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products Section -->
+  <div class="mt-16">
+    <h2 class="text-3xl font-extrabold text-gray-900 mb-8 text-center">You Might Also Like</h2>
+    {% if related_products %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {% for related_product in related_products %}
+          <a href="{{ related_product.get_absolute_url }}" class="group block bg-white rounded-lg shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
+            <div class="relative overflow-hidden">
+              {% if related_product.media.first %}
+                <img src="{{ related_product.media.first.media_file.url }}" alt="{{ related_product.name }}" class="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500">
+              {% else %}
+                <div class="w-full h-56 bg-gray-200 flex items-center justify-center">
+                  <i class="fas fa-image text-gray-400 text-4xl"></i>
+                </div>
+              {% endif %}
+              <div class="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-0 transition-all duration-300"></div>
+            </div>
+            <div class="p-5">
+              <h3 class="text-lg font-bold text-gray-800 truncate group-hover:text-red-600 transition-colors duration-300">{{ related_product.name }}</h3>
+              <p class="text-xl font-extrabold text-red-700 mt-2">
+                {% if related_product.price %}
+                  {% if related_product.tax_percentage > 0 %}
+                    PKR {{ related_product.get_price_with_tax|floatformat:2 }}
+                    <span class="text-sm text-gray-500">(incl. {{ related_product.tax_percentage }}% tax)</span>
+                  {% else %}
+                    PKR {{ related_product.price|floatformat:2 }}
+                  {% endif %}
+                {% else %}
+                  Price on request
+                {% endif %}
+              </p>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-center text-gray-500">No related products found.</p>
+    {% endif %}
+  </div>
+
+  <!-- Enhanced Fullscreen Lightbox Modal -->
+  <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-95 z-50 hidden items-center justify-center">
+    <!-- Close Button -->
+    <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-4xl hover:text-gray-300 transition-colors z-60">
+      <i class="fas fa-times"></i>
+    </button>
+    
+    <!-- Navigation Buttons -->
+    <button onclick="changeLightboxSlide(-1)" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-3xl hover:text-gray-300 transition-colors z-60 bg-black bg-opacity-50 rounded-full p-3">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button onclick="changeLightboxSlide(1)" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-3xl hover:text-gray-300 transition-colors z-60 bg-black bg-opacity-50 rounded-full p-3">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+    
+    <!-- Image Container -->
+    <div class="max-w-full max-h-full flex items-center justify-center p-8">
+      <img id="lightbox-img" class="max-w-full max-h-full object-contain" src="" alt="">
+    </div>
+    
+    <!-- Image Counter -->
+    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white bg-black bg-opacity-50 px-4 py-2 rounded-full">
+      <span id="image-counter">1 / 1</span>
+    </div>
+    
+    <!-- Thumbnail Strip -->
+    <div id="lightbox-thumbnails" class="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex space-x-2 max-w-full overflow-x-auto px-4">
+      <!-- Thumbnails will be generated by JavaScript -->
+    </div>
+  </div>
+
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // --- Auto-dismiss messages ---
+    const messagesContainer = document.getElementById('messages-container');
+    if (messagesContainer) {
+        const messages = messagesContainer.querySelectorAll('.message-card');
+        messages.forEach((message, index) => {
+            setTimeout(() => {
+                message.classList.add('fade-out');
+                setTimeout(() => message.remove(), 500); // Remove after animation
+            }, 5000 + (index * 500)); // Stagger fade-out
+        });
+    }
+
+    // --- Data Safely Parsed from Django ---
+    const mediaUrls = {{ media_urls_json|safe }};
+    let currentMediaIndex = 0;
+
+    // --- DOM Element References ---
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const imageCounter = document.getElementById('image-counter');
+    const lightboxThumbnails = document.getElementById('lightbox-thumbnails');
+    const mainImage = document.getElementById('main-image');
+    const tabsContainer = document.getElementById('tabs-container');
+    const glider = document.getElementById('tab-glider');
+    const stockBadge = document.getElementById('stock-status-badge');
+
+    // --- Lightbox & Gallery ---
+    function createLightboxThumbnails() {
+        if (!lightboxThumbnails || !mediaUrls.length) return;
+        lightboxThumbnails.innerHTML = '';
+        
+        mediaUrls.forEach((url, index) => {
+            const thumb = document.createElement('img');
+            thumb.src = url;
+            thumb.className = 'w-16 h-16 object-cover rounded cursor-pointer border-2 border-transparent hover:border-white transition-all';
+            thumb.onclick = () => {
+                currentMediaIndex = index;
+                updateLightboxContent();
+            };
+            lightboxThumbnails.appendChild(thumb);
+        });
+    }
+
+    function updateLightboxContent() {
+        if (!lightbox || !mediaUrls.length) return;
+        
+        if (lightboxImg) {
+            lightboxImg.src = mediaUrls[currentMediaIndex];
+        }
+        
+        if (imageCounter) {
+            imageCounter.textContent = `${currentMediaIndex + 1} / ${mediaUrls.length}`;
+        }
+        
+        // Update thumbnail selection
+        const thumbnails = lightboxThumbnails.querySelectorAll('img');
+        thumbnails.forEach((thumb, index) => {
+            if (index === currentMediaIndex) {
+                thumb.classList.add('border-white');
+            } else {
+                thumb.classList.remove('border-white');
+            }
+        });
+    }
+
+    window.openLightbox = function() {
+        if (mainImage) {
+            currentMediaIndex = parseInt(mainImage.dataset.currentIndex || 0, 10);
+        }
+        createLightboxThumbnails();
+        updateLightboxContent();
+        if (lightbox) {
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+    };
+
+    window.closeLightbox = function() {
+        if (lightbox) {
+            lightbox.classList.add('hidden');
+            lightbox.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+    };
+
+    window.changeLightboxSlide = function(n) {
+        if (!mediaUrls.length) return;
+        currentMediaIndex = (currentMediaIndex + n + mediaUrls.length) % mediaUrls.length;
+        updateLightboxContent();
+    };
+
+    window.changeMainImage = function(url, element, index) {
+        if (mainImage) {
+            mainImage.src = url;
+            mainImage.dataset.currentIndex = parseInt(index);
+        }
+        document.querySelectorAll('.oraagh-thumbnail').forEach(thumb => thumb.classList.remove('active'));
+        if (element) {
+            element.classList.add('active');
+        }
+    };
+
+    window.changeGallerySlide = function(n) {
+        if (!mediaUrls.length || !mainImage) return;
+        let currentIndex = parseInt(mainImage.dataset.currentIndex || 0, 10);
+        currentIndex = (currentIndex + n + mediaUrls.length) % mediaUrls.length;
+        const nextThumbnail = document.querySelector(`.oraagh-thumbnail[data-index="${currentIndex}"]`);
+        if (nextThumbnail) {
+            nextThumbnail.click();
+        }
+    };
+
+    // --- Keyboard Navigation ---
+    document.addEventListener('keydown', function(e) {
+        if (lightbox && !lightbox.classList.contains('hidden')) {
+            switch(e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    changeLightboxSlide(-1);
+                    break;
+                case 'ArrowRight':
+                    changeLightboxSlide(1);
+                    break;
+            }
+        }
+    });
+
+    // --- Touch/Swipe Support for Lightbox ---
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    lightbox?.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+
+    lightbox?.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                changeLightboxSlide(1); // Swipe left, next image
+            } else {
+                changeLightboxSlide(-1); // Swipe right, previous image
+            }
+        }
+    }
+
+    // --- Tabs ---
+    function updateGlider() {
+        if (!glider || !tabsContainer) return;
+        const activeTab = tabsContainer.querySelector('.tab-active');
+        if (activeTab) {
+            glider.style.width = `${activeTab.offsetWidth}px`;
+            glider.style.left = `${activeTab.offsetLeft}px`;
+        }
+    }
+
+    window.switchTab = function(tabId, clickedButton) {
+        document.querySelectorAll('.tab-panel').forEach(panel => {
+            panel.classList.remove('active');
+            panel.classList.add('hidden');
+        });
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.classList.remove('tab-active', 'text-red-600');
+            button.classList.add('tab-inactive', 'text-gray-500');
+        });
+
+        const panel = document.getElementById(`${tabId}-panel`);
+        if (panel) {
+            panel.classList.add('active');
+            panel.classList.remove('hidden');
+        }
+        if (clickedButton) {
+            clickedButton.classList.add('tab-active', 'text-red-600');
+            clickedButton.classList.remove('tab-inactive', 'text-gray-500');
+        }
+        updateGlider();
+    };
+
+    // --- Stock Status ---
+    function updateStockStatus() {
+        if (stockBadge) {
+            const stock = parseInt(stockBadge.dataset.stock, 10);
+            stockBadge.classList.remove('stock-in-stock', 'stock-low-stock', 'stock-out-of-stock');
+            if (stock > 10) {
+                stockBadge.textContent = 'In Stock';
+                stockBadge.classList.add('stock-in-stock');
+            } else if (stock > 0) {
+                stockBadge.textContent = `Low Stock (${stock} left)`;
+                stockBadge.classList.add('stock-low-stock');
+            } else {
+                stockBadge.textContent = 'Out of Stock';
+                stockBadge.classList.add('stock-out-of-stock');
+            }
+        }
+    }
+
+    // --- Initializations ---
+    function initialize() {
+        const firstTab = document.getElementById('overview-tab');
+        if (firstTab) {
+            window.switchTab('overview', firstTab);
+        }
+
+        updateStockStatus();
+        window.addEventListener('resize', updateGlider);
+
+        const activeThumbnail = document.querySelector('.media-thumbnail.active');
+        if (!activeThumbnail) {
+            const firstThumbnail = document.querySelector('.media-thumbnail');
+            if(firstThumbnail) {
+                firstThumbnail.classList.add('active');
+            }
+        }
+    }
+
+    initialize();
+});
+</script>
+
+{% endblock %}

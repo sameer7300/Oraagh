@@ -1,0 +1,70 @@
+{% extends 'admin_dashboard/base.html' %}
+
+{% block page_title %}Deal Request Details{% endblock %}
+{% block page_description %}Review and manage the details of the deal request{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl shadow-lg p-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Deal Details -->
+        <div class="lg:col-span-2">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Request from {{ deal.name }}</h3>
+            <div class="space-y-4">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Product</p>
+                    <p class="text-gray-800">{{ deal.product.name }}</p>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Contact Name</p>
+                    <p class="text-gray-800">{{ deal.name }}</p>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Email</p>
+                    <p class="text-gray-800">{{ deal.email }}</p>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Phone Number</p>
+                    <p class="text-gray-800">{{ deal.phone_number|default:"Not provided" }}</p>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Message</p>
+                    <p class="text-gray-800 whitespace-pre-wrap">{{ deal.message }}</p>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Received On</p>
+                    <p class="text-gray-800">{{ deal.created_at|date:"F d, Y, P" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Update -->
+        <div>
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Update Status</h3>
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <p class="text-sm font-medium text-gray-500 mb-2">Current Status</p>
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                {% if deal.status == 'New' %}bg-blue-100 text-blue-800{% endif %}
+                {% if deal.status == 'Contacted' %}bg-yellow-100 text-yellow-800{% endif %}
+                {% if deal.status == 'Closed' %}bg-green-100 text-green-800{% endif %}
+                mb-4">
+                    {{ deal.status }}
+                </span>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <label for="status" class="block text-sm font-medium text-gray-700 mt-4">Change Status</label>
+                    <select id="status" name="status" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="New" {% if deal.status == 'New' %}selected{% endif %}>New</option>
+                        <option value="Contacted" {% if deal.status == 'Contacted' %}selected{% endif %}>Contacted</option>
+                        <option value="Closed" {% if deal.status == 'Closed' %}selected{% endif %}>Closed</option>
+                    </select>
+                    <button type="submit" class="mt-4 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                        Update Status
+                    </button>
+                </form>
+            </div>
+            <a href="{% url 'admin_dashboard:deal_request_list' %}" class="mt-4 inline-block text-gray-500 hover:text-gray-700">&larr; Back to all requests</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

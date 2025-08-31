@@ -1,0 +1,67 @@
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Left Column: Existing Team Members -->
+    <div class="lg:col-span-2">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Assigned Team</h3>
+        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <ul class="divide-y divide-gray-200">
+                {% for member_assignment in lease.team_members.all %}
+                    <li class="p-4 flex items-center justify-between hover:bg-gray-50">
+                        <div class="flex items-center">
+                            {% if member_assignment.team_member.profile_image %}
+                                <img src="{{ member_assignment.team_member.profile_image.url }}" alt="{{ member_assignment.team_member.name }}" class="w-12 h-12 rounded-full object-cover mr-4">
+                            {% else %}
+                                <span class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xl font-bold mr-4">
+                                    {{ member_assignment.team_member.name|first }}
+                                </span>
+                            {% endif %}
+                            <div>
+                                <p class="font-semibold text-gray-900">{{ member_assignment.team_member.name }}</p>
+                                <p class="text-sm text-gray-500">{{ member_assignment.role }}</p>
+                            </div>
+                        </div>
+                        <a href="{% url 'admin_dashboard:lease_team_member_remove' lease.id member_assignment.id %}" 
+                           onclick="return confirm('Are you sure you want to remove this team member from the project?')"
+                           class="text-gray-400 hover:text-red-600 transition-colors" title="Remove Member">
+                            <i class="fas fa-times-circle text-lg"></i>
+                        </a>
+                    </li>
+                {% empty %}
+                    <li class="p-6 text-center text-gray-500">
+                        <i class="fas fa-users text-3xl mb-2"></i>
+                        <p>No team members have been assigned to this project yet.</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Right Column: Add New Team Member -->
+    <div>
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Add Member</h3>
+        <div class="bg-white border border-gray-200 rounded-lg p-6">
+            <form action="{% url 'admin_dashboard:lease_team_member_add' lease.id %}" method="post">
+                {% csrf_token %}
+                <div class="space-y-4">
+                    <div>
+                        <label for="team_member" class="block text-sm font-medium text-gray-700 mb-1">Team Member</label>
+                        <select name="team_member" id="team_member" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                            <option value="">Select a member</option>
+                            {% for member in all_team_members %}
+                                <option value="{{ member.id }}">{{ member.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                        <input type="text" name="role" id="role" required placeholder="e.g., Project Manager"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <button type="submit" class="w-full btn-primary text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-plus mr-2"></i>
+                        Add to Project
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
