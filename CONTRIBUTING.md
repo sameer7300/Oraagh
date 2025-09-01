@@ -1,6 +1,6 @@
-# Contributing to Red Sun Mining (Oraagh)
+# Contributing to (Oraagh)
 
-Thank you for your interest in contributing to the Red Sun Mining e-commerce platform! This guide outlines how to contribute effectively.
+Thank you for your interest in contributing to the Oraagh woolen e-commerce platform! This guide outlines how to contribute effectively.
 
 ## 🤝 How to Contribute
 
@@ -71,7 +71,7 @@ Any other relevant information.
 ### Setup Steps
 ```bash
 # Fork and clone
-git clone https://github.com/yourusername/red-sun-mining.git
+git clone https://github.com/yourusername/oraagh.git
 cd red-sun-mining
 
 # Create virtual environment
@@ -106,7 +106,7 @@ from typing import Optional, List
 from django.db import models
 
 class Product(models.Model):
-    """Model representing a mining equipment product."""
+    """Model representing a woolen product."""
     
     name: str = models.CharField(max_length=255, help_text="Product name")
     price: Decimal = models.DecimalField(max_digits=10, decimal_places=2)
