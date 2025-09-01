@@ -137,10 +137,6 @@ RED sun MINING/
 │   ├── views.py             # Cart and checkout
 │   ├── management/          # Cart reminder commands
 │   └── templates/           # Order templates
-├── portfolio/               # Lease management
-│   ├── models.py            # Lease, TeamMember models
-│   ├── views.py             # Portfolio views
-│   └── templates/           # Portfolio templates
 ├── products/                # Product catalog
 │   ├── models.py            # Product, Review, DealRequest
 │   ├── views.py             # Product listing and details
