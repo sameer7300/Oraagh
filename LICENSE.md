@@ -4,7 +4,7 @@
 
 **Oraagh woolen E-commerce Platform (Oraagh)**
 
-Copyright (c) 2025 Red Sun Mining Company. All rights reserved.
+Copyright (c) 2025 Oraagh Woolen Company. All rights reserved.
 
 ### Terms and Conditions
 
