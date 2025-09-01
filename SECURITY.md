@@ -1,8 +1,8 @@
-# Security Policy - Red Sun Mining (Oraagh)
+# Security Policy - (Oraagh)
 
 ## 🔒 Security Overview
 
-The Red Sun Mining e-commerce platform implements comprehensive security measures to protect user data, transactions, and system integrity.
+The Oraagh woolen e-commerce platform implements comprehensive security measures to protect user data, transactions, and system integrity.
 
 ## 🛡️ Security Features
 
